@@ -1,0 +1,2176 @@
+/* ==========================================
+LA PILE À LIRE — THÈME GLOBAL
+Version douce, playful et cohérente
+Objectifs :
+- garder Hibook chaleureux et mignon
+- unifier les cartes, boutons et sections
+- réduire l'effet "fouillis"
+- préserver une identité visuelle vivante
+========================================== */
+
+/* ==========================================
+1. VARIABLES GLOBALES
+Toutes les couleurs, rayons, ombres et
+transitions réutilisables dans toute l'app.
+Pour changer l'ambiance, commence ici.
+========================================== */
+
+:root {
+  /* Fond principal de la page */
+  --bg: #fbf8ff;
+
+  /* Surfaces principales : cartes, modals, panneaux */
+  --surface: #ffffff;
+
+  /* Surfaces alternées : sections un peu teintées */
+  --surface-alt: #f4ecff;
+
+  /* Variantes très douces pour les blocs internes */
+  --surface-soft: #faf6ff;
+
+  /* Texte principal */
+  --text: #243042;
+
+  /* Texte secondaire */
+  --text-muted: #6b7280;
+
+  /* Texte très discret */
+  --text-soft: #8a8fa0;
+
+  /* Couleur signature Hibook */
+  --primary: #9b59b6;
+
+  /* Mauve un peu plus soutenu au hover */
+  --primary-hover: #9258c9;
+
+  /* Bleu doux pour les éléments de support */
+  --secondary: #6ea8ff;
+
+  /* Bleu un peu plus vif au hover */
+  --secondary-hover: #5b96f5;
+
+  /* Accent joyeux : étoiles, highlights */
+  --accent: #f4b942;
+
+  /* Succès / validation */
+  --success: #6ad28f;
+
+  /* Danger / suppression */
+  --danger: #e86a6a;
+
+  /* Couleur sombre pour la navbar, footer et blocs contrastés */
+  --dark: #2f3b4d;
+
+  /* Bordure standard douce */
+  --border: #eadff7;
+
+  /* Bordure un peu plus marquée pour les états actifs */
+  --border-strong: #d9c3ef;
+
+  /* Rayons cohérents sur toute l'interface */
+  --radius-sm: 10px;
+  --radius: 16px;
+  --radius-lg: 24px;
+
+  /* Ombres légères pour le repos */
+  --shadow-sm: 0 2px 8px rgba(36, 48, 66, 0.06);
+
+  /* Ombre standard */
+  --shadow: 0 8px 24px rgba(36, 48, 66, 0.10);
+
+  /* Ombre forte pour modals et focus importants */
+  --shadow-lg: 0 14px 36px rgba(36, 48, 66, 0.14);
+
+  /* Courbes de transition */
+  --ease-pop: cubic-bezier(0.2, 0.9, 0.2, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================
+2. RESET & BASE
+Nettoyage des styles navigateur + base
+de lecture confortable.
+========================================== */
+
+/* Réinitialise marges, padding et box-model sur tous les éléments */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Défilement animé pour les liens ancres (#section) */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Police principale + fond dégradé subtil mauve/bleu en haut de page */
+body {
+  font-family: 'Source Sans Pro', sans-serif;
+  color: var(--text);
+  line-height: 1.7;
+  background:
+    radial-gradient(circle at top left, rgba(165, 107, 222, 0.10), transparent 30%),
+    radial-gradient(circle at top right, rgba(110, 168, 255, 0.08), transparent 26%),
+    var(--bg);
+}
+
+/* Empêche les images de déborder de leur conteneur */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Les formulaires héritent de la police du body (évite la police système par défaut) */
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+/* Les liens héritent de la couleur du texte parent (pas de bleu natif du navigateur) */
+a {
+  color: inherit;
+}
+
+/* Décalage de défilement pour compenser la navbar sticky
+   (logo 72px + padding ≈ 23px = ~95px) */
+section {
+  width: 100%;
+  scroll-margin-top: 95px;
+}
+
+/* ==========================================
+3. TYPOGRAPHIE
+Le titre principal reste un peu signature,
+le reste reste lisible et calme.
+========================================== */
+
+/* Tous les titres : espacement négatif entre lettres pour un look plus compact et moderne */
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 1rem;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+/* h1 et h2 utilisent Nickainley (police signature de l'app, chargée via CDN) */
+h1, h2 {
+  font-family: 'Nickainley', cursive;
+  font-weight: 700;
+}
+
+/* h3 et sous-titres en Source Sans Pro pour la lisibilité */
+h3, h4, h5, h6 {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 700;
+}
+
+/* Tailles de titre — hiérarchie : h1 grand, h2 section, h3 sous-section */
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+/* Paragraphes : marge basse systématique pour espacer les blocs de texte */
+p {
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+/* Texte mis en valeur dans la couleur mauve principale (ex: "La Pile à Lire!" dans le hero) */
+.accent {
+  color: var(--primary);
+}
+
+/* ==========================================
+4. BOUTONS
+Deux variantes claires, rondes et un peu
+joueuses, avec une animation de remplissage.
+========================================== */
+
+/* Classe de base commune à tous les boutons.
+   position:relative + overflow:hidden permettent l'animation de remplissage via ::before */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 12px 22px;
+  border-radius: 999px;    /* capsule arrondie */
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.25s var(--ease-soft), transform 0.2s var(--ease-pop);
+}
+
+/* Légère élévation au survol pour tous les boutons */
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Pseudo-élément servant de fond animé lors du hover.
+   Il part invisible (scaleX 0) et se déploie de gauche à droite au survol.
+   z-index:-1 le place derrière le texte. */
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.35s var(--ease-pop);
+  z-index: -1;
+}
+
+.btn:hover::before {
+  transform: scaleX(1);
+}
+
+/* Bouton primaire : fond mauve plein.
+   Au hover, le ::before blanc se déploie → texte devient mauve sur fond blanc */
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  border: 2px solid var(--primary);
+}
+
+.btn-primary::before {
+  background: #fff;
+}
+
+.btn-primary:hover {
+  color: var(--primary);
+}
+
+/* Bouton secondaire : contour mauve transparent.
+   Au hover, le ::before mauve se déploie → texte devient blanc sur fond mauve */
+.btn-secondary {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+
+.btn-secondary::before {
+  background: var(--primary);
+}
+
+.btn-secondary:hover {
+  color: #fff;
+}
+
+/* Modificateur de taille : version compacte pour les boutons dans les filtres, tableaux, etc. */
+.btn-small {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+}
+
+/* Bouton "Réinitialiser les filtres" dans l'accordéon sombre.
+   Blanc sur fond transparent pour contraster avec le fond --dark de l'accordéon */
+.btn-reset-white {
+  background: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+}
+
+.btn-reset-white::before {
+  background: #fff;
+}
+
+/* Au hover, le texte devient sombre (fond blanc déployé par ::before) */
+.btn-reset-white:hover {
+  color: var(--dark);
+}
+
+/* ==========================================
+5. NAVBAR
+Barre fixe, simple, lisible et cohérente
+avec la signature de l'app.
+========================================== */
+
+/* Barre collée en haut de page pendant le défilement (sticky).
+   z-index:100 passe au-dessus du contenu mais sous les modals (z-index:1000) */
+.navbar {
+  background-color: var(--primary);
+  padding: 0.65rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Conteneur interne : centre le contenu et aligne logo / liens sur la même ligne */
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Lien du logo : flex pour aligner image et texte côte à côte.
+   flex-shrink:0 empêche le logo de se comprimer si l'espace manque */
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+/* Image du logo : hauteur fixe, largeur auto pour conserver les proportions */
+.logo-img {
+  height: 72px;
+  width: auto;
+  display: block;
+}
+
+/* Liste des liens de navigation : flex horizontal avec retour à la ligne si l'écran est trop étroit */
+.nav-menu {
+  display: flex;
+  list-style: none;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* Lien de navigation individuel : blanc, sans soulignement, white-space:nowrap
+   évite qu'un lien passe sur deux lignes à mi-mot */
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  opacity: 0.78;
+}
+
+
+/* ==========================================
+6. SECTION CONTAINER
+Classe utilitaire partagée par les sections principales.
+Limite le contenu à 1200px et le centre horizontalement,
+avec un padding latéral de 2rem pour respirer sur les côtés.
+À utiliser comme conteneur interne dans chaque <section>.
+========================================== */
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%;
+}
+
+/* Toutes les sections occupent toute la largeur de la fenêtre.
+   Le centrage du contenu est géré par .section-container à l'intérieur. */
+.hero,
+.about,
+.search-section,
+.admin-section,
+.how-it-works,
+.stats,
+.navbar {
+  width: 100%;
+}
+
+/* ==========================================
+7. HERO
+Section d'accueil plus douce, avec un fond
+légèrement teinté et une hiérarchie nette.
+========================================== */
+
+/* Section d'accueil pleine largeur : dégradé subtil mauve + bleu en fond,
+   reproduit l'ambiance douce du thème global */
+.hero {
+  padding: 4rem 2rem;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(165, 107, 222, 0.10), transparent 28%),
+    radial-gradient(circle at 90% 20%, rgba(110, 168, 255, 0.10), transparent 24%),
+    linear-gradient(180deg, #fff, #f9f4ff);
+  color: var(--text);
+}
+
+/* Grille 2 colonnes : texte à gauche, mascotte à droite.
+   Passe en 1 colonne sur mobile (voir responsive) */
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 3rem;
+}
+
+/* Titre principal du hero : plus grand que le h1 global (3rem vs 2.5rem) */
+.hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 1.25rem;
+  color: var(--text);
+}
+
+/* Partie colorée du titre ("La Pile à Lire!") */
+.hero-content h1 .accent {
+  color: var(--primary);
+}
+
+/* Description sous le titre : limitée à 54 caractères de large pour rester lisible */
+.hero-content p {
+  font-size: 1.08rem;
+  margin-bottom: 2rem;
+  color: var(--text-muted);
+  max-width: 54ch;
+}
+
+/* Groupe de boutons CTA côte à côte, avec retour à la ligne si nécessaire */
+.btn-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Colonne droite : conteneur relatif pour positionner la bulle en absolu par-dessus la mascotte */
+.hero-image {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Bulle de dialogue au-dessus de Hibook.
+   Son texte est mis à jour par JavaScript selon la taille de la pile.
+   opacity:0 + animation : apparaît en fondu après 1,2s (laisse la mascotte arriver en premier) */
+.hibook-bubble {
+  background: #fff;
+  border: 2.5px solid var(--primary);
+  border-radius: 999px;
+  padding: 0.75rem 1.3rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text);
+  max-width: 240px;
+  text-align: center;
+  position: absolute;
+  top: 0px;
+  right: -10px;
+  z-index: 2;
+  box-shadow: 0 4px 18px rgba(155, 89, 182, 0.18);
+  animation: fadeInLogo 1s ease 1.2s forwards;
+  opacity: 0;
+}
+
+/* Pointe de la bulle (triangle externe, couleur bordure mauve) */
+.hibook-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -13px;
+  left: 28px;
+  transform: none;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 13px solid var(--primary);
+}
+
+/* Pointe de la bulle (triangle interne blanc, légèrement plus petit,
+   crée l'effet "contour + fond blanc" de la pointe) */
+.hibook-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: -9px;
+  left: 30px;
+  transform: none;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 10px solid #fff;
+  z-index: 1;
+}
+
+/* Classe ajoutée par JavaScript lors d'un changement de message pour pulsation */
+.hibook-bubble.pop {
+  animation: bubblePop 0.35s var(--ease-pop);
+}
+
+/* Mascotte Hibook : arrivée en fondu depuis le bas (fadeInLogo 1.4s, délai 0.4s).
+   opacity:0 initial évite un flash avant le début de l'animation */
+.hibook-hero {
+  width: 100%;
+  max-width: 380px;
+  cursor: default;
+  animation: fadeInLogo 1.4s ease 0.4s forwards;
+  opacity: 0;
+  border-radius: 16px;
+  transition: filter 0.35s ease;
+}
+
+/* Halo lumineux mauve au survol de la mascotte */
+.hibook-hero:hover {
+  filter: drop-shadow(0 0 18px rgba(165, 107, 222, 0.32));
+}
+
+@keyframes fadeInLogo {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bubblePop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/* ==========================================
+8. STATISTIQUES
+Bande de chiffres-clés plus lisible, avec
+contraste fort mais pas trop agressif.
+========================================== */
+
+/* Bande pleine largeur sur fond dégradé mauve → mauve foncé */
+.stats {
+  background: linear-gradient(180deg, var(--primary), var(--primary-hover));
+  color: #fff;
+  padding: 3rem 2rem;
+}
+
+/* Grille auto-adaptative : 4 colonnes sur desktop, s'adapte sur tablette/mobile */
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Carte individuelle d'une statistique : fond sombre semi-transparent
+   sur le dégradé mauve pour créer un effet de profondeur */
+.stat-card {
+  text-align: center;
+  padding: 2rem;
+  background: rgba(47, 59, 77, 0.92);
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Chiffre principal (ex: "7747") : grand et blanc */
+.stat-card h3 {
+  font-size: 2.5rem;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+/* Libellé sous le chiffre (ex: "Livres disponibles") : légèrement transparent */
+.stat-card p {
+  color: rgba(255, 255, 255, 0.88);
+  margin-bottom: 0;
+}
+
+/* ==========================================
+9. COMMENT ÇA MARCHE
+Cartes de progression plus joyeuses, avec
+un léger effet de flottement.
+========================================== */
+
+/* Section "Comment ça marche" : centrée, limitée à 1200px.
+   N'utilise pas .section-container car elle gère son propre centrage */
+.how-it-works {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.how-it-works h2 {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+/* Grille de 4 étapes : auto-fit pour passer en 2×2 sur tablette puis 1 colonne sur mobile */
+.steps-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Carte d'une étape : fond dégradé mauve, coins très arrondis (--radius-lg).
+   Effet de flottement au survol via translateY */
+.step {
+  text-align: center;
+  padding: 2.5rem 2rem;
+  background: linear-gradient(180deg, var(--primary), var(--primary-hover));
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  color: #fff;
+  transition: transform 0.25s var(--ease-pop), box-shadow 0.25s var(--ease-soft);
+}
+
+.step:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Icône Lucide centrée au-dessus du titre de chaque étape */
+.step-icon {
+  margin: 0 auto 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Taille de l'icône SVG Lucide (injectée via lucide.createIcons()) */
+.step-icon i {
+  width: 52px;
+  height: 52px;
+  color: #fff;
+}
+
+.step h3 {
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
+.step p {
+  color: rgba(255, 255, 255, 0.88);
+  margin-bottom: 0;
+}
+
+/* ==========================================
+10. SECTION RECHERCHE & FILTRES
+Bloc fonctionnel, mais adouci et plus cohérent.
+========================================== */
+
+/* Section recherche : fond --surface-alt (mauve très pâle) pour se distinguer du hero.
+   min-height:80vh garantit que la section occupe l'essentiel de l'écran même si peu de résultats */
+.search-section {
+  padding: 3rem 2rem;
+  background: var(--surface-alt);
+  min-height: 80vh;
+}
+
+/* Section admin : même fond que search-section mais sans min-height
+   car le tableau peut être court selon la recherche */
+.admin-section {
+  padding: 3rem 2rem;
+  background: var(--surface-alt);
+}
+
+/* Conteneur interne des sections recherche et admin :
+   max-width et margin héritent de .section-container */
+.search-container {
+}
+
+.search-container h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Barre de recherche rapide : flex row avec icône + input + bouton ✕.
+   focus-within fait réagir tout le conteneur quand l'input est actif */
+.quick-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.7rem 1.1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s var(--ease-pop);
+}
+
+/* Mise en avant de la barre quand l'input est focalisé :
+   bordure mauve + halo + légère élévation */
+.quick-search-bar:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(165, 107, 222, 0.12);
+  transform: translateY(-1px);
+}
+
+/* Icône loupe à gauche de la barre : flex-shrink:0 empêche l'icône de se comprimer */
+.quick-search-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* Champ de saisie : flex:1 lui permet d'occuper tout l'espace disponible dans la barre.
+   background transparent pour fusionner avec le fond de .quick-search-bar */
+.quick-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--text);
+  background: transparent;
+}
+
+.quick-search-input::placeholder {
+  color: var(--text-soft);
+  font-style: italic;
+}
+
+/* Bouton ✕ pour vider la recherche : masqué par défaut via style="display:none" dans le HTML.
+   JavaScript le rend visible dès qu'un texte est saisi dans la barre */
+.quick-search-clear {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-soft);
+  font-size: 1rem;
+  padding: 0 0.25rem;
+  transition: color 0.2s ease;
+}
+
+.quick-search-clear:hover {
+  color: var(--danger);
+}
+
+/* Accordéon des filtres : conteneur global avec bordure et coins arrondis.
+   overflow:hidden pour que les coins du premier/dernier item respectent le border-radius */
+.filters-accordion {
+  margin-bottom: 2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Item de l'accordéon : séparé du suivant par une bordure basse */
+.accordion-item {
+  border-bottom: 1px solid var(--border);
+}
+
+/* Supprime la bordure du dernier item pour éviter le doublon avec le bord du conteneur */
+.accordion-item:last-child {
+  border-bottom: none;
+}
+
+/* En-tête cliquable d'un panneau de filtre : fond sombre, texte blanc.
+   JavaScript ajoute la classe .open pour indiquer le panneau actif */
+.accordion-header {
+  width: 100%;
+  background: var(--dark);
+  border: none;
+  padding: 1rem 1.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  text-align: left;
+}
+
+.accordion-header:hover {
+  background: #3d5166; /* légèrement plus clair que --dark (#2f3b4d) */
+}
+
+/* En-tête du panneau actif : passe au mauve de l'app */
+.accordion-header.open {
+  background: var(--primary);
+}
+
+/* Chevron SVG à droite de l'en-tête : pivoté de 180° quand le panneau est ouvert */
+.accordion-chevron {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.accordion-header.open .accordion-chevron {
+  transform: rotate(180deg);
+}
+
+/* Corps du panneau de filtres : caché par défaut, révélé par JavaScript via .open.
+   Animation d'entrée douce depuis le haut */
+.accordion-body {
+  display: none;
+  padding: 1.35rem;
+  background: var(--surface-soft);
+  animation: accordionOpen 0.2s ease;
+}
+
+.accordion-body.open {
+  display: block;
+}
+
+@keyframes accordionOpen {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Groupe de filtres : colonne verticale avec un libellé en haut et les options en-dessous */
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Libellé du groupe de filtres (ex: "Format"), exclu des labels radio/checkbox */
+.filter-group label:not(.radio-label):not(.checkbox-label) {
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+
+/* Options de filtre en ligne (radio buttons format/longueur) */
+.filter-options {
+  display: flex;
+  flex-direction: row;
+  gap: 0.55rem;
+}
+
+/* Label cliquable pour un radio ou une checkbox :
+   curseur pointer + couleur mauve au survol */
+.radio-label,
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.radio-label:hover,
+.checkbox-label:hover {
+  color: var(--primary);
+}
+
+/* accent-color colorie le radio/checkbox dans la couleur primaire de l'app */
+.radio-label input[type="radio"],
+.checkbox-label input[type="checkbox"] {
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
+/* Champ de recherche textuelle générique (utilisé dans certains filtres internes).
+   Distinct de .quick-search-input qui est dans la barre principale */
+.search-input {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  background: var(--surface);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(165, 107, 222, 0.10);
+}
+
+/* Note textuelle affichant le nombre de genres restants (ex: "· 2 restant(s) - max 3").
+   Mis à jour dynamiquement par JavaScript */
+.genre-note {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+}
+
+/* Grille des checkboxes de genres : auto-fill pour s'adapter à la largeur disponible */
+.genres-checkbox-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0.55rem;
+}
+
+/* Barre basse de l'accordéon contenant le bouton "Réinitialiser les filtres".
+   Même fond sombre que les en-têtes pour une cohérence visuelle */
+.accordion-reset-row {
+  padding: 0.75rem 1.4rem;
+  background: var(--dark);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ==========================================
+11. GRILLE DE LIVRES
+Cartes plus aérées, plus lisibles et plus
+cohérentes avec le reste de l'app.
+========================================== */
+
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.load-more-container {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+#load-more-btn {
+  padding: 14px 40px;
+  font-size: 1rem;
+}
+
+.book-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  transition: transform 0.25s var(--ease-pop), box-shadow 0.25s var(--ease-soft);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+
+.book-cover {
+  width: 100%;
+  height: 240px;
+  aspect-ratio: unset;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  text-align: center;
+  color: #fff;
+  font-weight: 700;
+  line-height: 1.3;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Couleurs de couverture par genre */
+
+.book-cover.genre-non-fiction {
+  background: linear-gradient(135deg, #e0e0e0 0%, #c8c8c8 100%);
+}
+
+.book-cover.genre-manga,
+.book-cover.genre-bd {
+  background: linear-gradient(135deg, #d4d9f0 0%, #c2caeb 100%);
+}
+
+.book-cover.genre-horreur,
+.book-cover.genre-thriller {
+  background: linear-gradient(135deg, #d99aa8 0%, #c07a8a 100%);
+}
+
+.book-cover.genre-humour {
+  background: linear-gradient(135deg, #fce8d9 0%, #fad4b8 100%);
+}
+
+.book-cover.genre-policier,
+.book-cover.genre-mystery {
+  background: linear-gradient(135deg, #a0b9f0 0%, #85a0e8 100%);
+}
+
+.book-cover.genre-romance {
+  background: linear-gradient(135deg, #fbcfe0 0%, #f7b3d0 100%);
+}
+
+.book-cover.genre-fantasy {
+  background: linear-gradient(135deg, #e0c5f0 0%, #c9a8e8 100%);
+}
+
+.book-cover.genre-sf {
+  background: linear-gradient(135deg, #b8e0c5 0%, #95d0a8 100%);
+}
+
+.book-cover.genre-jeunesse {
+  background: linear-gradient(135deg, #fbd9b8 0%, #f7c090 100%);
+}
+
+.book-cover.genre-drame {
+  background: linear-gradient(135deg, #d4b0d4 0%, #c090c0 100%);
+}
+
+.book-cover.genre-classique,
+.book-cover.genre-historique {
+  background: linear-gradient(135deg, #95a5c0 0%, #7a90b0 100%);
+}
+
+.book-cover.genre-fantastique {
+  background: linear-gradient(135deg, #d4b8f0 0%, #b090e0 100%);
+}
+
+.book-cover.genre-aventure {
+  background: linear-gradient(135deg, #c5e0b0 0%, #a8d090 100%);
+}
+
+.book-cover.genre-autre {
+  background: linear-gradient(135deg, #f5d98a 0%, #f0c050 100%);
+}
+
+/* Bloc d'information sous la couverture dans chaque carte.
+   flex-grow:1 lui permet d'occuper tout l'espace restant dans la carte (flex colonne) */
+.book-info {
+  padding: 1.25rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Titre du livre dans la carte de recherche */
+.book-title {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.45rem;
+  color: var(--text);
+}
+
+/* Auteur du livre : légèrement plus petit et atténué */
+.book-author {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+/* Métadonnées (format + pages/durée) : colonne verticale de spans discrets */
+.book-meta {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+/* Conteneur des boutons d'action (étoile + cœur) : margin-top:auto le colle en bas de la carte */
+.book-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+/* Bouton étoile (⭐) : ajouter à la pile.
+   Gris par défaut, jaune (--accent) au hover et quand actif (.active) */
+.book-favorite-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-soft);
+  transition: color 0.2s ease, transform 0.2s var(--ease-pop);
+  line-height: 1;
+}
+
+.book-favorite-btn:hover {
+  color: var(--accent);
+  transform: scale(1.15);
+}
+
+/* État actif : livre déjà dans la pile → étoile jaune permanente */
+.book-favorite-btn.active {
+  color: var(--accent);
+}
+
+/* Bouton cœur (🩷) : coup de cœur, indépendant de la pile.
+   Rose foncé (#e05a7a) au hover et quand actif (.active) */
+.book-like-btn {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: var(--text-soft);
+  transition: color 0.2s ease, transform 0.2s var(--ease-pop);
+  line-height: 1;
+  margin-left: 0.1rem;
+}
+
+.book-like-btn:hover {
+  color: #e05a7a;
+  transform: scale(1.15);
+}
+
+/* État actif : livre aimé → cœur rose permanent */
+.book-like-btn.active {
+  color: #e05a7a;
+}
+
+/* Étoiles de notation affichées dans les cartes archivées et la modal de détail.
+   Même caractère ★ pour plein et vide, différenciés uniquement par l'opacité */
+.star-full {
+  opacity: 1;
+}
+
+.star-empty {
+  opacity: 0.22;
+}
+
+/* ==========================================
+BOUTONS MODAUX - ICÔNES ANIMÉES
+Bouton "Ajouter à ma pile" / "Retirer" dans la modal de détail.
+L'icône étoile change de fill selon l'état (in-pile / not-in-pile)
+et s'inverse au hover pour indiquer l'action qui sera effectuée.
+========================================== */
+
+/* Base du bouton d'action modal : fond mauve plein, animation de remplissage identique à .btn */
+.btn-modal-action {
+  background: var(--primary);
+  color: #fff;
+  border: 2px solid var(--primary);
+  transition: all 0.25s var(--ease-soft);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-modal-action::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.35s var(--ease-pop);
+  background: #fff;
+  z-index: -1;
+}
+
+.btn-modal-action:hover {
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.btn-modal-action:hover::before {
+  transform: scaleX(1);
+}
+
+/* État: livre dans la pile (étoile pleine au repos, vide au hover) */
+.btn-modal-action.in-pile i[data-lucide="star"] svg,
+.btn-modal-action.in-pile svg[data-lucide="star"],
+.btn-modal-action.in-pile i svg {
+  fill: currentColor;
+  stroke: none;
+}
+
+.btn-modal-action.in-pile:hover i[data-lucide="star"] svg,
+.btn-modal-action.in-pile:hover svg[data-lucide="star"],
+.btn-modal-action.in-pile:hover i svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+/* État: livre PAS dans la pile (étoile vide au repos, pleine au hover) */
+.btn-modal-action.not-in-pile i[data-lucide="star"] svg,
+.btn-modal-action.not-in-pile svg[data-lucide="star"],
+.btn-modal-action.not-in-pile i svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.btn-modal-action.not-in-pile:hover i[data-lucide="star"] svg,
+.btn-modal-action.not-in-pile:hover svg[data-lucide="star"],
+.btn-modal-action.not-in-pile:hover i svg {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* Bouton coup de cœur */
+.btn-liked {
+  background: var(--primary);
+  color: #fff;
+  border: 2px solid var(--primary);
+  transition: all 0.25s var(--ease-soft);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-liked::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.35s var(--ease-pop);
+  background: #fff;
+  z-index: -1;
+}
+
+.btn-liked:hover {
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.btn-liked:hover::before {
+  transform: scaleX(1);
+}
+
+/* Non aimé : cœur vide (outline) au repos, plein au hover */
+.btn-liked:not(.is-liked) i svg,
+.btn-liked:not(.is-liked) svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.btn-liked:not(.is-liked):hover i svg,
+.btn-liked:not(.is-liked):hover svg {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* Aimé : cœur plein au repos, vide au hover */
+.btn-liked.is-liked i svg,
+.btn-liked.is-liked svg {
+  fill: currentColor;
+  stroke: none;
+}
+
+.btn-liked.is-liked:hover i svg,
+.btn-liked.is-liked:hover svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+/* Message "Aucun résultat" : caché par défaut (display:none).
+   JavaScript ajoute .show quand aucun livre ne correspond aux filtres */
+.no-results {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-muted);
+  display: none;
+}
+
+.no-results.show {
+  display: block;
+}
+
+/* Message d'invitation affiché avant toute recherche (logo + texte explicatif).
+   Disposition horizontale : logo à gauche, texte à droite.
+   JavaScript le masque dès qu'une recherche est lancée */
+.search-prompt {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2.5rem;
+  padding: 1.75rem 2.25rem;
+  margin: 0 auto 2.5rem;
+  max-width: 980px;
+  width: 100%;
+  color: var(--text-muted);
+}
+
+/* Bloc texte du message d'invitation : flex:1 pour occuper l'espace restant.
+   min-width:0 évite un débordement du texte dans certains navigateurs */
+.search-prompt-text {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+}
+
+.search-prompt h3 {
+  color: var(--text);
+  margin-bottom: 0.75rem;
+}
+
+.search-prompt p {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-bottom: 0;
+}
+
+/* Logo Hibook dans les messages d'invitation et "aucun résultat".
+   flex-shrink:0 empêche l'image de se comprimer si l'espace est réduit */
+.hibook-sad {
+  width: 130px;
+  opacity: 0.85;
+  flex-shrink: 0;
+  border-radius: var(--radius);
+}
+
+/* ==========================================
+12. PILE À LIRE (PAL)
+Espace personnel plus contrasté, pour bien
+séparer cette section des autres.
+========================================== */
+
+/* Section PAL pleine largeur sur fond sombre (--dark) pour se démarquer visuellement.
+   max-width:none + margin:0 annule l'éventuelle contrainte héritée de .section-container */
+.my-pile-section {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 3rem 2rem 4rem;
+  background: var(--dark);
+  min-height: 70vh;
+  color: #fff;
+}
+
+/* Conteneur interne centré, indépendant de .section-container (section sur fond sombre) */
+.my-pile-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.my-pile-section h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #fff;
+}
+
+/* Barre d'onglets (À lire / En cours / Lus) : flex horizontal avec ligne de séparation basse.
+   border-bottom sur le conteneur, border-bottom-color sur chaque .pile-tab pour l'indicateur actif */
+.pile-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.14);
+}
+
+/* Onglet individuel : transparent, texte blanc atténué.
+   bottom:-2px pour que le border-bottom de l'onglet actif chevauche la ligne du conteneur */
+.pile-tab {
+  background: none;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.72);
+  border-bottom: 3px solid transparent;
+  transition: all 0.25s var(--ease-soft);
+  position: relative;
+  bottom: -2px;
+}
+
+/* Onglet actif : texte blanc plein + trait blanc sous l'onglet.
+   JavaScript ajoute/retire .active via switchPileTab() */
+.pile-tab.active {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+
+/* Panneau de contenu d'un onglet : caché par défaut.
+   .active est ajouté par JavaScript quand l'onglet correspondant est sélectionné */
+.pile-tab-content {
+  display: none;
+  color: #fff;
+}
+
+.pile-tab-content.active {
+  display: block;
+}
+
+/* Liste des livres dans un onglet : colonne verticale d'items */
+.pile-books-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Ligne d'un livre dans la pile : grille 3 colonnes (couverture | infos | boutons).
+   Fond légèrement blanc transparent sur le fond sombre */
+.pile-book-item {
+  background: rgba(255, 255, 255, 0.07);
+  padding: 1.4rem;
+  border-radius: var(--radius);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1.5rem;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+  transition: transform 0.25s var(--ease-pop), box-shadow 0.25s var(--ease-soft), background 0.25s ease;
+}
+
+.pile-book-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Miniature de couverture dans la pile : dimensions réduites (80×120px) vs grille (240px de haut).
+   Réutilise .book-cover pour les couleurs de genre */
+.pile-book-item .book-cover {
+  width: 80px;
+  height: 120px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  padding: 0.6rem;
+}
+
+/* .pile-book-cover est un alias CSS de .pile-book-item .book-cover — pas de règle séparée nécessaire */
+
+/* Bloc texte (titre, auteur, format/pages) : flex-grow pour occuper la colonne centrale */
+.pile-book-info {
+  flex-grow: 1;
+}
+
+.pile-book-info h3 {
+  margin-bottom: 0.3rem;
+  color: #fff;
+}
+
+.pile-book-info p {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+/* Groupe de boutons d'action (3e colonne de la grille) : flex-wrap si trop de boutons */
+.pile-book-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Bouton d'action compact dans la pile (En cours, Lu !, Retirer, etc.) :
+   capsule arrondie, plus petit que .btn */
+.action-btn {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.2s var(--ease-pop), background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Variante principale : mauve (ex: "📖 En cours", "✓ Lu !") */
+.action-btn.primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.action-btn.primary:hover {
+  background: var(--primary-hover);
+}
+
+/* Variante secondaire : blanc transparent sur fond sombre (ex: "⏸ En pause", "↩ Remettre") */
+.action-btn.secondary {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.action-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* Variante danger : rouge (ex: "✕ Retirer") */
+.action-btn.danger {
+  background: var(--danger);
+  color: #fff;
+}
+
+.action-btn.danger:hover {
+  background: #d85a5a;
+}
+
+/* Message vide de l'onglet : caché par défaut (display:none).
+   JavaScript ajoute .show quand la liste de l'onglet est vide */
+.empty-pile {
+  text-align: center;
+  padding: 3rem;
+  color: rgba(255, 255, 255, 0.78);
+  display: none;
+}
+
+.empty-pile.show {
+  display: block;
+}
+
+.empty-pile h3 {
+  color: #fff;
+}
+
+.empty-pile p {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* Lien "Cherchez des livres" dans le message vide de l'onglet "À lire" */
+.empty-pile a {
+  color: #fff;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* white-space:nowrap sur chaque bouton d'action pour éviter les retours à la ligne intempestifs */
+.pile-book-actions .action-btn {
+  white-space: nowrap;
+}
+
+
+/* ==========================================
+13. À PROPOS
+Bloc de présentation plus chaleureux,
+avec contraste doux.
+========================================== */
+
+.about {
+  padding: 4rem 2rem;
+  background: var(--surface-alt);
+}
+
+.about-container {
+  padding: 2.5rem 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+.about-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.about-content h2 {
+  color: var(--text);
+  margin-bottom: 1.2rem;
+}
+
+.about-content p {
+  font-size: 1.08rem;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  color: var(--text-muted);
+}
+
+.about-content p:last-child {
+  margin-bottom: 0;
+}
+
+.about-image {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  text-align: right;
+}
+
+.hibook-about {
+  max-width: 320px;
+  width: 100%;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: transform 0.25s var(--ease-pop), filter 0.25s ease;
+}
+
+.hibook-about:hover {
+  transform: translateY(-4px);
+  filter: drop-shadow(0 0 18px rgba(165, 107, 222, 0.24));
+}
+
+@media (max-width: 768px) {
+  .about {
+    padding: 3rem 1.25rem;
+  }
+
+  .about-container {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    padding: 1.75rem 1.25rem;
+  }
+
+  .about-content {
+    text-align: center;
+  }
+
+  .about-image {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hibook-about {
+    max-width: 220px;
+  }
+}
+
+/* ==========================================
+14. FOOTER
+Pied de page compact, lisible et cohérent
+avec la palette globale.
+========================================== */
+
+.footer {
+  background-color: var(--primary);
+  color: #fff;
+  text-align: center;
+  padding: 2rem;
+}
+
+.footer p {
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.footer a {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* ==========================================
+15. MODALS
+Fenêtres contextuelles plus douces, avec
+un overlay moins dur et une entrée fluide.
+========================================== */
+
+/* Overlay de modal : couvre toute la fenêtre en position fixe.
+   z-index:1000 passe au-dessus de la navbar (z-index:100).
+   Caché par défaut ; JavaScript ajoute .show pour l'afficher */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(36, 48, 66, 0.52); /* fond sombre semi-transparent */
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* État visible : flex pour centrer .modal-content horizontalement et verticalement */
+.modal.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Panneau blanc de la modal : largeur 90% avec un max (600px par défaut, surchargeable inline).
+   max-height + overflow-y pour les modals longues (ex: formulaire admin) */
+.modal-content {
+  background-color: var(--surface);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  animation: slideUp 0.28s var(--ease-pop);
+  border: 1px solid var(--border);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Bouton ✕ de fermeture : positionné en absolu dans .modal-content (qui est relative) */
+.close-modal {
+  position: absolute;
+  right: 1.5rem;
+  top: 1rem;
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--text-soft);
+}
+
+.close-modal:hover {
+  color: var(--text);
+}
+
+/* Corps principal de la modal : marge haute pour ne pas coller au ✕ */
+.modal-body {
+  margin-top: 1rem;
+}
+
+/* Colonne gauche de la modal de détail : contient la couverture agrandie */
+.book-detail-cover {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+/* Couverture dans la modal : format portrait (ratio 2:3), minimum 300px de haut */
+.book-detail-cover .book-cover {
+  aspect-ratio: 2 / 3;
+  min-height: 300px;
+  border-radius: var(--radius);
+}
+
+/* Titre du livre dans la modal de détail */
+.book-detail-info h2 {
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+/* Auteur sous le titre dans la modal */
+.detail-author {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Grille de métadonnées (Format / Pages / Genre) : auto-fit pour s'adapter à la largeur */
+.detail-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Item de métadonnée individuel (ex: "Format: Papier") */
+.meta-item {
+  display: block;
+}
+
+/* Libellé d'un item de métadonnée (ex: "Format:") en mauve, au-dessus de la valeur */
+.meta-item strong {
+  display: block;
+  color: var(--primary);
+  margin-bottom: 0.3rem;
+}
+
+/* Bloc résumé dans la modal de détail */
+.detail-summary {
+  margin-bottom: 2rem;
+}
+
+.detail-summary h3 {
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+.detail-summary p {
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+/* Boutons d'action en bas de la modal de détail (Ajouter à ma pile, Coup de cœur) */
+.detail-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Bloc centré de notation (étoiles + texte indicatif) dans la modal de notation */
+.rating-container {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+/* Rangée de 5 étoiles cliquables */
+.stars-rating {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+/* Étoile individuelle : grise par défaut, jaune (--accent) au hover et quand active.
+   JavaScript ajoute .active sur les étoiles sélectionnées via setRating() */
+.stars-rating .star {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  color: #d9dce6;
+  transition: color 0.2s ease, transform 0.2s var(--ease-pop);
+}
+
+.stars-rating .star:hover,
+.stars-rating .star.active {
+  color: var(--accent);
+  transform: scale(1.08);
+}
+
+/* Texte indicatif sous les étoiles (ex: "Vous avez choisi : 4/5 étoiles").
+   Mis à jour par JavaScript via setRating() */
+#rating-text {
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+/* Zone de texte pour laisser un commentaire libre sur le livre.
+   resize:vertical pour que l'utilisateur puisse l'agrandir verticalement uniquement */
+.review-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: inherit;
+  resize: vertical;
+  margin-bottom: 1.5rem;
+  background: var(--surface);
+}
+
+.review-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(165, 107, 222, 0.10);
+}
+
+/* Boutons de confirmation/annulation en bas de la modal (Confirmer, Annuler) */
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* ==========================================
+16. RESPONSIVE GLOBAL
+Ajustements pour tablette et mobile.
+========================================== */
+
+@media (max-width: 768px) {
+  h1 { font-size: 1.8rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.2rem; }
+
+  /* --- Navbar --- */
+  .navbar-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .nav-menu {
+    gap: 0.6rem;
+    font-size: 0.88rem;
+    justify-content: center;
+  }
+
+  .logo-img {
+    height: 52px;
+  }
+
+  /* --- Hero --- */
+  .hero {
+    padding: 2.5rem 1.25rem;
+  }
+
+  .hero-inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .hero-content p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .btn-group {
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hibook-hero {
+    max-width: 220px;
+  }
+
+  .hibook-bubble {
+    max-width: 180px;
+    font-size: 0.82rem;
+    top: -10px;
+    right: 0;
+  }
+
+  /* --- Stats --- */
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .stat-card {
+    padding: 1.25rem;
+  }
+
+  .stat-card h3 {
+    font-size: 1.8rem;
+  }
+
+  /* --- Comment ça marche --- */
+  .steps-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  /* --- Recherche --- */
+  .search-section {
+    padding: 2rem 1rem;
+  }
+
+  .search-prompt {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    gap: 1rem;
+  }
+
+  .hibook-sad {
+    width: 100px;
+  }
+
+  .books-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  /* --- Pile à lire --- */
+  .my-pile-section {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .pile-book-item {
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+  }
+
+  .pile-book-actions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* --- À propos --- */
+  .about-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 2rem;
+  }
+
+  .about-image {
+    text-align: center;
+    order: -1;
+  }
+
+  .hibook-about {
+    max-width: 180px;
+  }
+
+  /* --- Modal --- */
+  .modal-content {
+    width: 95%;
+    max-height: 95vh;
+    padding: 1.5rem;
+  }
+
+  .detail-actions,
+  .modal-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  /* --- Navbar : liens sur une ligne avec overflow scroll --- */
+  .navbar-container {
+    padding: 0.4rem 0.75rem;
+  }
+
+  .nav-menu {
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  .logo-img {
+    height: 44px;
+  }
+
+  /* --- Hero --- */
+  .hero {
+    padding: 2rem 1rem;
+  }
+
+  .hero-content h1 {
+    font-size: 1.6rem;
+  }
+
+  .btn {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+
+  /* --- Stats : 2 colonnes sur mobile --- */
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* --- Comment ça marche : 1 colonne --- */
+  .steps-container {
+    grid-template-columns: 1fr;
+  }
+
+  /* --- Recherche --- */
+  .search-prompt {
+    padding: 1rem 0.75rem;
+  }
+
+  .hibook-sad {
+    width: 80px;
+  }
+
+  .books-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .book-cover {
+    height: 180px;
+  }
+
+  /* --- Pile --- */
+  .pile-tabs {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .pile-tab {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.85rem;
+  }
+
+  .pile-book-cover {
+    width: 64px;
+    height: 96px;
+  }
+
+  .pile-book-item .book-cover {
+    width: 64px;
+    height: 96px;
+  }
+
+  .action-btn {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  /* --- About --- */
+  .about-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .about {
+    padding: 2rem 1rem;
+  }
+
+  /* --- Modal --- */
+  .modal-content {
+    padding: 1rem;
+  }
+
+  .stars-rating {
+    gap: 0.6rem;
+  }
+
+  .stars-rating .star {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+
+/* ==========================================
+17. AVIS ET NOTATION ARCHIVÉS
+Styles pour l'affichage des notes et commentaires
+dans les cartes de la pile "Lus" et la modal de détail.
+========================================== */
+
+/* Rangée d'étoiles ★ dans la colonne d'actions d'un livre archivé.
+   margin-right pour séparer les étoiles des boutons d'action */
+.pile-rating-stars {
+  font-size: 1.1rem;
+  color: var(--accent, #f5c518);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  white-space: nowrap;
+  margin-right: 1rem;
+}
+
+/* Bloc encadré affiché dans la modal de détail quand le livre est archivé.
+   Bordure gauche colorée (--accent) pour signaler visuellement l'avis */
+.archived-review-block {
+  margin: 1.25rem 0;
+  padding: 1rem 1.25rem;
+  background: rgba(0, 0, 0, 0.04);
+  border-left: 3px solid var(--accent, #f5c518);
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+/* Étoiles dans la modal de détail (plus grandes que dans la carte) */
+.archived-review-stars {
+  font-size: 1.4rem;
+  color: var(--accent, #f5c518);
+  letter-spacing: 0.1em;
+  margin: 0 0 0.5rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Libellé "VOTRE AVIS" en petites capitales discrètes */
+.archived-review-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.55;
+  margin: 0 0 0.25rem;
+}
+
+/* Texte du commentaire en italique, légèrement transparent */
+.archived-review-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  font-style: italic;
+  margin: 0;
+  opacity: 0.85;
+}
