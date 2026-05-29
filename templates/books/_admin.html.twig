@@ -1,0 +1,62 @@
+<!-- ==========================================
+    ADMIN BOOKS — Gestion des livres (CRUD)
+    Section d'administration pour ajouter,
+    modifier ou supprimer un livre.
+  ========================================== -->
+<section id="admin-books" class="admin-section">
+	<div class="section-container search-container">
+		<h2>Administration — Livres</h2>
+
+		<!-- Barre de recherche : filtre le tableau en temps réel via JavaScript -->
+		<div class="quick-search-bar" style="margin-bottom: 1rem;">
+			<i data-lucide="search" class="quick-search-icon"></i>
+			<input
+			type="text" id="admin-search" class="quick-search-input" placeholder="Filtrer par titre ou auteur&hellip;">
+			<!-- Bouton ✕ : masqué au chargement, affiché par JavaScript dès qu'un texte est saisi -->
+			<button id="admin-clear-search" class="quick-search-clear" title="Effacer" style="display:none;">&#10005;</button>
+		</div>
+
+		<!-- Bouton d'ouverture de la modal d'ajout -->
+		<div style="display:flex; justify-content:flex-end; margin-bottom:1.5rem;">
+			<button id="admin-add-btn" class="btn btn-secondary">
+				<i data-lucide="plus" style="width:16px;height:16px;vertical-align:middle;margin-right:.35rem;"></i>
+				Ajouter un livre
+			</button>
+		</div>
+
+		<!-- Message d'invite : affiché par défaut, masqué par JavaScript dès qu'une recherche est lancée -->
+		<div id="admin-search-prompt" class="search-prompt" style="margin-bottom:1.5rem;">
+			<img src="./images/logo-bleu.png" alt="Hibook" class="hibook-sad">
+			<div class="search-prompt-text">
+				<h3>Recherchez un livre pour l'afficher ici</h3>
+				<p>Tapez un titre ou un auteur dans la barre ci-dessus pour consulter et modifier les livres.</p>
+			</div>
+		</div>
+
+		<!-- Tableau des livres : le tbody est rempli dynamiquement par JavaScript -->
+		<div style="overflow-x:auto;">
+			<table id="admin-books-table" style="width:100%;border-collapse:collapse;font-size:.9rem;">
+				<thead>
+					<tr style="border-bottom:2px solid #e5e7eb; text-align:left;">
+						<th style="padding:.6rem .8rem;">Titre</th>
+						<th style="padding:.6rem .8rem;">Auteur</th>
+						<th style="padding:.6rem .8rem;">Format</th>
+						<th style="padding:.6rem .8rem;">Longueur</th>
+						<th style="padding:.6rem .8rem;">Genre(s)</th>
+						<th style="padding:.6rem .8rem; text-align:center;">Actions</th>
+					</tr>
+				</thead>
+				<tbody
+					id="admin-books-tbody"><!-- Injecté par JavaScript (admin.js) -->
+				</tbody>
+			</table>
+		</div>
+
+		<!-- Message affiché par JavaScript si aucun livre ne correspond à la recherche -->
+		<div id="admin-no-books" class="no-results" style="display:none;">
+			<img src="./images/logo-bleu.png" alt="Hibook" class="hibook-sad">
+			<h3>Aucun livre trouvé</h3>
+			<p>Ajoutez votre premier livre avec le bouton ci-dessus.</p>
+		</div>
+	</div>
+</section>

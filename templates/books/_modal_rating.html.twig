@@ -1,0 +1,35 @@
+  <!-- Modal de notation
+        Affichée quand l'utilisateur marque un livre comme lu depuis la PAL.
+        JavaScript récupère la note et le commentaire avant de mettre à jour
+        les données dans le localStorage. -->
+  <div id="rating-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <div class="modal-body">
+        <h2>Votre avis sur ce livre</h2>
+
+        <div class="rating-container">
+          <div class="stars-rating">
+            <!-- 5 étoiles cliquables : data-rating indique la valeur (1 à 5).
+                JavaScript colore les étoiles en jaune jusqu'à celle cliquée. -->
+            <i data-lucide="star" class="star" data-rating="1"></i>
+            <i data-lucide="star" class="star" data-rating="2"></i>
+            <i data-lucide="star" class="star" data-rating="3"></i>
+            <i data-lucide="star" class="star" data-rating="4"></i>
+            <i data-lucide="star" class="star" data-rating="5"></i>
+          </div>
+          <!-- Texte mis à jour par JavaScript selon la note cliquée -->
+          <p id="rating-text">Sélectionnez une note (1-5 étoiles)</p>
+        </div>
+
+        <!-- Commentaire libre, facultatif -->
+        <textarea id="review-text" class="review-textarea"
+          placeholder="Votre avis sur le livre (optionnel)..."></textarea>
+
+        <div class="modal-actions">
+          <button id="confirm-rating" class="btn btn-secondary">Confirmer</button>
+          <button id="cancel-rating" class="btn btn-secondary">Annuler</button>
+        </div>
+      </div>
+    </div>
+  </div><!-- /rating-modal -->

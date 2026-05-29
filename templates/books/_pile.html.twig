@@ -1,0 +1,61 @@
+<!-- ==========================================
+      MY PILE — Ma Pile à Lire (PAL)
+      Section personnelle avec 3 onglets :
+      À lire / En cours / Lus.
+      Les données sont lues et écrites dans le
+      localStorage du navigateur via storage.js.
+  ========================================== -->
+<section id="my-pile" class="my-pile-section">
+	<div class="my-pile-container">
+		<h2>Ma Pile à Lire</h2>
+
+		<!-- Barre d'onglets.
+      data-tab= : identifiant lu par JavaScript pour afficher le bon panneau.
+      class="active" : onglet sélectionné par défaut au chargement. -->
+		<div class="pile-tabs">
+			<button class="pile-tab active" data-tab="to-read">À lire</button>
+			<button class="pile-tab" data-tab="reading">En cours</button>
+			<button class="pile-tab" data-tab="liked">Lus ♥</button>
+			<button class="pile-tab" data-tab="archived">Archivés</button>
+		</div>
+
+		<!-- Panneau "À lire" : visible par défaut (class="active") -->
+		<div
+			id="to-read-tab" class="pile-tab-content active">
+			<!-- JavaScript injecte les cartes de livres dans cette liste -->
+			<div id="to-read-list" class="pile-books-list"></div>
+			<!-- Message vide : JavaScript ajoute class="show" quand la liste est vide -->
+			<div class="empty-pile">
+				<h3>Votre pile est vide</h3>
+				<p>
+					<a href="#search">Cherchez des livres</a>
+					pour commencer!</p>
+			</div>
+		</div>
+
+		<!-- Panneau "En cours" : masqué par défaut -->
+		<div id="reading-tab" class="pile-tab-content">
+			<div id="reading-list" class="pile-books-list"></div>
+			<div class="empty-pile">
+				<h3>Pas de lecture en cours</h3>
+			</div>
+		</div>
+
+		<!-- Panneau "Lus ♥" : coups de cœur archivés, masqué par défaut -->
+		<div id="liked-tab" class="pile-tab-content">
+			<div id="liked-list" class="pile-books-list"></div>
+			<div class="empty-pile">
+				<h3>Aucun coup de cœur pour l'instant</h3>
+				<p>Marquez un livre lu avec ♥ pour le retrouver ici.</p>
+			</div>
+		</div>
+
+		<!-- Panneau "Archivés" : livres lus sans coup de cœur, masqué par défaut -->
+		<div id="archived-tab" class="pile-tab-content">
+			<div id="archived-list" class="pile-books-list"></div>
+			<div class="empty-pile">
+				<h3>Aucun livre archivé pour l'instant</h3>
+			</div>
+		</div>
+	</div>
+</section>

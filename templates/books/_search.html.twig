@@ -1,0 +1,174 @@
+<!-- ==========================================
+    SEARCH — Recherche & bibliothèque
+    Barre de recherche rapide + accordéon de
+    filtres + grille des résultats.
+  ========================================== -->
+<section id="search" class="search-section">
+	<div class="section-container search-container">
+		<h2>Cherchez un livre</h2>
+
+		<!-- Message d'invitation affiché par défaut, avant toute recherche.
+					JavaScript le masque dès qu'une recherche est lancée. -->
+		<div id="search-prompt" class="search-prompt">
+			<img src="./images/logo-bleu.png" alt="Hibook" class="hibook-sad">
+			<div class="search-prompt-text">
+				<h3>Entrez un mot-clé ou choisissez un filtre pour découvrir des livres !</h3>
+				<p>Titre, auteur, genre… Hibook s'occupe du reste.</p>
+				<p>Utilisez ⭐️ pour ajouter un livre à votre pile et 🩷 pour sélectionner vos favoris!</p>
+			</div>
+		</div>
+
+		<!-- Barre de recherche rapide (titre / auteur)
+				Peut être combinée avec les filtres de l'accordéon ci-dessous.
+				La recherche se déclenche à chaque frappe via JavaScript. -->
+		<div class="quick-search-bar">
+			<i data-lucide="search" class="quick-search-icon"></i>
+			<input
+			type="text" id="keyword-search" class="quick-search-input" placeholder="Je sais ce que je cherche — titre, auteur...">
+			<!-- Bouton ✕ : masqué au chargement, affiché par JavaScript dès qu'un texte est saisi -->
+			<button id="clear-keyword" class="quick-search-clear" title="Effacer" style="display:none;">✕</button>
+		</div>
+
+		<!-- Accordéon de filtres
+			Un seul panneau peut être ouvert à la fois (géré par JavaScript).
+			Chaque bouton .accordion-header porte un data-accordion="id" qui permet
+			à JavaScript d'identifier quel panneau ouvrir ou fermer. -->
+		<div
+			class="filters-accordion" id="filters-accordion">
+
+			<!-- === Filtre Format === -->
+			<div class="accordion-item">
+				<button class="accordion-header" data-accordion="format">
+					<span>Format</span>
+					<!-- Chevron SVG : pivoté de 180° via CSS quand le panneau est ouvert -->
+					<svg class="accordion-chevron" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<polyline points="6 9 12 15 18 9"></polyline>
+					</svg>
+				</button>
+				<!-- Corps du panneau : masqué par défaut, révélé par JavaScript au clic -->
+				<div class="accordion-body" id="accordion-format">
+					<div class="filter-group">
+						<div
+							class="filter-options">
+							<!-- Boutons radio groupés par name="format" : un seul choix possible.
+									La valeur (value=) est lue par JavaScript pour filtrer les résultats.
+									checked : option sélectionnée par défaut. -->
+							<label class="radio-label">
+								<input type="radio" name="format" value="all" checked>
+								<span>Tous les formats</span>
+							</label>
+							<label class="radio-label">
+								<input type="radio" name="format" value="ebook">
+								<span>E-book</span>
+							</label>
+							<label class="radio-label">
+								<input type="radio" name="format" value="papier">
+								<span>Papier</span>
+							</label>
+							<label class="radio-label">
+								<input type="radio" name="format" value="audio">
+								<span>Audiobook</span>
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- === Filtre Longueur === -->
+			<div class="accordion-item">
+				<button class="accordion-header" data-accordion="length">
+					<span>Longueur</span>
+					<svg class="accordion-chevron" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<polyline points="6 9 12 15 18 9"></polyline>
+					</svg>
+				</button>
+				<div class="accordion-body" id="accordion-length">
+					<div class="filter-group">
+						<div class="filter-options">
+							<label class="radio-label">
+								<input type="radio" name="length" value="all" checked>
+								<span>Toutes longueurs</span>
+							</label>
+							<label class="radio-label">
+								<input type="radio" name="length" value="comic">
+								<span id="length-comic-label">Moins de 100 pages (bd)</span>
+							</label>
+							<label class="radio-label">
+								<input
+								type="radio" name="length" value="short">
+								<!-- id= sur les trois spans suivants : JavaScript remplace leur texte
+										par des durées en minutes quand le format Audiobook est sélectionné -->
+								<span id="length-short-label">100 - 299 pages</span>
+							</label>
+							<label class="radio-label">
+								<input type="radio" name="length" value="medium">
+								<span id="length-medium-label">300 - 500 pages</span>
+							</label>
+							<label class="radio-label">
+								<input type="radio" name="length" value="long">
+								<span id="length-long-label">Plus de 500 pages</span>
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- === Filtre Genres === -->
+			<div class="accordion-item">
+				<button class="accordion-header" data-accordion="genres">
+					<span>Genre(s)
+						<small style="font-weight:400;margin-left:.5rem;" id="genre-note">- max 3</small>
+					</span>
+					<svg class="accordion-chevron" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<polyline points="6 9 12 15 18 9"></polyline>
+					</svg>
+				</button>
+				<div class="accordion-body" id="accordion-genres">
+					<div class="filter-group">
+						<div
+							class="genres-filter">
+							<!-- Les checkboxes de genres sont générées dynamiquement depuis la liste dans la base de données -->
+							<div id="genres-list" class="genres-checkbox-list">
+								{% for genre in genres_list %}
+									<label class="checkbox-label">
+										<input type="checkbox" value="{{ genre.id }}" class="genre-checkbox">
+										<span>{{ genre.name }}</span>
+									</label>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Bouton de réinitialisation : remet tous les filtres à leur valeur par défaut -->
+			<div class="accordion-reset-row">
+				<button id="reset-filters" class="btn btn-reset-white btn-small">Réinitialiser les filtres</button>
+			</div>
+
+		</div>
+		<!-- /filters-accordion -->
+
+		<!-- Zone d'affichage des résultats -->
+		<div
+			class="results-container">
+
+			<!-- Grille des cartes livres : JavaScript injecte les <div class="book-card"> ici -->
+			<div id="books-grid" class="books-grid"></div>
+
+			<!-- Bouton "Voir plus" : caché par défaut.
+					JavaScript l'affiche s'il reste des livres à charger (pagination par tranches). -->
+			<div class="load-more-container" id="load-more-container" style="display:none;">
+				<button id="load-more-btn" class="btn btn-secondary">Voir plus de livres</button>
+			</div>
+
+			<!-- Message "aucun résultat" : caché par défaut.
+						JavaScript l'affiche si la recherche ne retourne aucun livre. -->
+			<div id="no-results" class="no-results">
+				<img src="./images/logo-bleu.png" alt="Hibook" class="hibook-sad">
+				<h3>Aucun livre ne correspond à votre recherche</h3>
+				<p>Essayez d'ajuster vos critères pour trouver votre prochaine lecture!</p>
+			</div>
+		</div>
+	</div>
+</section>

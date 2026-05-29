@@ -1,0 +1,33 @@
+  <!-- ==========================================
+      HERO — Section d'accueil
+      Mise en page en grille 2 colonnes via
+      hero-inner : texte + boutons à gauche,
+      mascotte Hibook à droite.
+  ========================================== -->
+  <section id="home" class="hero">
+    <div class="section-container hero-inner">
+
+      <!-- Colonne gauche : accroche, description et boutons d'action -->
+      <div class="hero-content">
+        <h1>Bienvenue dans <span class="accent">La Pile à Lire!</span></h1>
+        <!-- class="accent" : affiche le texte dans la couleur mauve du thème -->
+        <p>Une application qui vous aide à gérer vos lectures selon votre temps, votre humeur et vos envies.</p>
+        <div class="btn-group">
+          <!-- Deux boutons côte à côte (flex row dans le CSS) -->
+          <a href="#search" class="btn btn-secondary">C'est parti!</a>
+          <a href="#how-it-works" class="btn btn-secondary">En savoir plus</a>
+        </div>
+      </div>
+
+      <!-- Colonne droite : mascotte avec bulle de dialogue -->
+      <div class="hero-image">
+        <!-- Bulle de dialogue : son texte est mis à jour par JavaScript
+            en fonction du contenu de la pile (vide, en cours de lecture, etc.) -->
+        <div class="hibook-bubble" id="hibook-bubble">
+          <span id="hibook-bubble-text">Salut ! Prêt·e à dévorer un bon livre ?</span>
+        </div>
+        <!-- Mascotte Hibook : animation fadeInLogo au chargement + halo au survol (CSS) -->
+        <img src="images/hibook-seul.png" alt="Hibook" class="hibook-hero">
+      </div>
+    </div>
+  </section>
