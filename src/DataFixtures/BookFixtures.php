@@ -2,55 +2,35 @@
 
 namespace App\DataFixtures;
 
+// Book : l'entité Doctrine qui représente un livre en base de données
 use App\Entity\Book;
+// Fixture : classe de base de DoctrineFixturesBundle — donne accès à load()
 use Doctrine\Bundle\FixturesBundle\Fixture;
+// ObjectManager : interface Doctrine pour persist() et flush()
 use Doctrine\Persistence\ObjectManager;
 
 /**
- * LA PILE À LIRE - DATABASE & STATISTICS
- * ======================================
+ * Fixtures Doctrine : peuple la table "book" en base de données.
  *
- * Responsabilités:
- * - BOOKS_DATABASE: catalogue complet de tous les livres (statique, lu une seule fois)
- * - GENRES_LIST: liste des genres disponibles pour les filtres
- * - getStatistics(): calcule les stats affichées sur la page (total, moyennes, counts)
+ * À exécuter via : php bin/console doctrine:fixtures:load
+ * Attention : cette commande vide la table avant d'insérer les nouvelles données.
  *
- * Aucune manipulation du DOM ici.
- * Les données ne sont jamais modifiées en cours d'exécution.
+ * Les données brutes sont définies dans getBooksData() et correspondent
+ * exactement aux champs de l'entité Book.
  */
-
-// ========== CATALOGUE DES LIVRES ==========
-
-/**
- * BOOKS_DATABASE: Tableau statique de tous les livres disponibles.
- *
- * Structure commune à tous les livres:
- * - id (number): identifiant unique persistant (même si le titre change)
- * - title (string): nom affiché sur les cartes et modals
- * - author (string): auteur affiché sous le titre
- * - format (string): "papier" | "ebook" | "audio"
- * - pages (number | null): nombre de pages (null pour audios)
- * - duration (string, optionnel): "Xh Ym" uniquement pour format "audio"
- * - genres (string[]): tableau de slugs (ex: ["fantasy", "adventure"])
- * - summary (string): résumé affiché dans la modal de détail
- * - cover_color (string): classe CSS pour la couleur de couverture.
- *     Doit correspondre à une classe définie dans app.css (ex: "genre-fantasy").
- *     NE PAS générer depuis le slug — utiliser la table de correspondance
- *     GENRE_COLOR_MAP ci-dessous pour s'assurer que la classe existe bien.
- * - series (string, optionnel): nom de la série (ex: "Dungeon Crawler Carl")
- *     Si null, le livre est considéré comme standalone.
- * - book_number (number, optionnel): numéro du tome dans la série (ex: 1, 2, 3)
- *     Si null, le livre est considéré comme standalone.
- * - language (string): "fr" | "en" (défaut: "fr")
- *     Utilisé dans la recherche textuelle pour retrouver les livres par langue */
-
 class BookFixtures extends Fixture
 {
+  /**
+   * Méthode appelée automatiquement par Symfony lors du chargement des fixtures.
+   * Elle crée un objet Book par entrée du tableau, le configure, puis le sauvegarde en BDD.
+   */
   public function load(ObjectManager $manager): void
   {
     $books = $this->getBooksData();
 
     foreach ($books as $data) {
+      // Crée une nouvelle entité Book et l'hydrate avec les données du tableau.
+      // "?? null" est utilisé pour les champs optionnels absents du tableau (pages, duration, etc.)
       $book = new Book();
       $book->setTitle($data['title']);
       $book->setAuthor($data['author']);
@@ -63,32 +43,47 @@ class BookFixtures extends Fixture
       $book->setSeries($data['series'] ?? null);
       $book->setBookNumber($data['book_number'] ?? null);
       $book->setLanguage($data['language'] ?? 'fr');
+
+      // persist() signale à Doctrine qu'il faut insérer cet objet en BDD,
+      // mais n'exécute pas encore de requête SQL.
       $manager->persist($book);
     }
 
+    // flush() envoie tous les INSERT en une seule fois (plus performant qu'un flush par livre).
     $manager->flush();
   }
 
+  /**
+   * Retourne le catalogue complet des livres sous forme de tableaux associatifs.
+   *
+   * Champs communs à tous les livres :
+   * - title, author, format ("papier"|"ebook"|"audio"), genres (tableau de slugs)
+   * - summary, cover_color (classe CSS définie dans app.css), language ("fr"|"en")
+   *
+   * Champs conditionnels :
+   * - pages    : nombre de pages (null pour les audios)
+   * - duration : durée au format "Xh Ym" (uniquement pour les audios)
+   * - series / book_number : nom de la série et numéro du tome (null si livre standalone)
+   */
   private function getBooksData(): array
   {
-    // Copiez ici le contenu de BOOKS_DATABASE depuis votre data.js,
-    // converti en tableau PHP. Exemple pour les premiers livres :
-
     return [
+      // --- Exemple 1 : ebook, tome 1 d'une série ---
       [
         'id'          => 1,
         'title'       => 'Dungeon Crawler Carl',
         'author'      => 'Matt Dinniman',
         'format'      => 'ebook',
         'pages'       => 528,
-        'duration'    => null,
+        'duration'    => null,                                          // null car ce n'est pas un audio
         'genres'      => ['science-fiction', 'adventure', 'humour'],
-        'cover_color' => 'genre-sf',
+        'cover_color' => 'genre-sf',                                    // classe CSS dans app.css
         'series'      => 'Dungeon Crawler Carl',
         'book_number' => 1,
         'language'    => 'en',
         'summary'     => "It's the most-watched game show in the galaxy! In a flash, every human-erected construction on Earth--from Buckingham Palace to the tiniest of sheds to all the trucks and cars--collapses in a heap, sinking into the ground. The buildings and all the people inside, they've all been atomized and transformed into the dungeon: an 18-level labyrinth filled with traps, monsters, and loot. A dungeon so enormous, it circles the entire globe. Only a few dare venture inside. But once you're in, you can't get out. And what's worse, each level has a time limit. You have but days to find a staircase to the next level down, or it's game over. In this game, it's not about your strength or your dexterity. It's about your views and your followers. It's about building an audience and killing those goblins with style. You can't just survive here. You gotta survive big.",
       ],
+      // --- Exemple 2 : même série, tome 2, en français ---
       [
         'id'          => 2,
         'title'       => "L'Ogive du jugement dernier",
@@ -99,8 +94,8 @@ class BookFixtures extends Fixture
         'genres'      => ['science-fiction', 'adventure', 'humour'],
         'cover_color' => 'genre-sf',
         'series'      => 'Dungeon Crawler Carl',
-        'book_number' => 2,
-        'language'    => 'fr',
+        'book_number' => 2,                                             // book_number suit la série, pas l'id
+        'language'    => 'fr',                                          // traduction française du tome 1
         'summary'     => "Que devient le duo de choc le plus suivi de l'univers ? Arrivés au niveau 3, Carl et Donut, auxquels s'est joint le jeune Mongo, sont à la croisée des chemins. Ils doivent sélectionner une race et une classe : perspective aussi excitante qu'effrayante, qui les changera peut-être pour toujours... Et ce n'est pas tout. Surprise : la vaste métropole où se déroule cette nouvelle partie de l'aventure n'est en fait que le premier palier d'un réseau de six niveaux urbains interconnectés, où les attendent des défis plus périlleux les uns que les autres. Le risque est partout, et gagner de l'expérience n'a jamais été aussi crucial. Mais les nouvelles quêtes proposées à Carl et Donut viennent perturber le cours du jeu...",
       ],
       [

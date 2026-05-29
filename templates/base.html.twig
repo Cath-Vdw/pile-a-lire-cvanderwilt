@@ -1,24 +1,43 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}La Pile à Lire{% endblock %}</title>
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
+    {# Lucide Icons depuis CDN #}
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
-        {% set frankenphpHotReload = app.request.server.get('FRANKENPHP_HOT_RELOAD') %}
-        {% if frankenphpHotReload %}
-        <meta name="frankenphp-hot-reload:url" content="{{ frankenphpHotReload }}">
-        <script src="https://cdn.jsdelivr.net/npm/idiomorph"></script>
-        <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
-        {% endif %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+    {# Police Nickainley #}
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/nickainley">
+
+    {# CSS #}
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+
+    {# La navbar est partagée entre toutes les pages #}
+    {% block navbar %}
+        {% include 'books/_navbar.html.twig' %}
+    {% endblock %}
+
+    {% block body %}{% endblock %}
+
+    <footer class="footer">
+        <p>&copy; 2026 La Pile à Lire - Créé avec ❤️ pour les lecteurs</p>
+    </footer>
+
+    {# Les livres venant de MySQL sont injectés ici pour que app.js les utilise #}
+    {% block books_data %}{% endblock %}
+
+    {# scripts JS #}
+    <script src="{{ asset('js/storage.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
+
+    {% block javascripts %}{% endblock %}
+
+    <script>lucide.createIcons();</script>
+</body>
 </html>

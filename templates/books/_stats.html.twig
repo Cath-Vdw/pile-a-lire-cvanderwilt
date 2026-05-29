@@ -2,25 +2,25 @@
       STATS — Bande de statistiques
       4 indicateurs clés sur fond coloré.
       Les id= permettent à la fonction
-      getstatistics() du repository
+      getstatistics()
       de cibler les éléments à mettre à jour.
   ========================================== -->
 <section id="stats" class="stats">
 	<div class="section-container stats-container">
 		<div class="stat-card">
-			<h3 id="stat-books">7747</h3>
-			<p>Livres disponibles</p>
+			<h3 id="stat-books">{{ stats.totalBooks }}</h3>
+			<p>Livres encodés</p>
 		</div>
 		<div class="stat-card">
-			<h3 id="stat-pages">345</h3>
+			<h3 id="stat-pages">{{ stats.avgPages }}</h3>
 			<p>Pages moyennes</p>
 		</div>
 		<div class="stat-card">
-			<h3 id="stat-genres">18</h3>
+			<h3 id="stat-genres">{{ stats.uniqueGenres }}</h3>
 			<p>Genres différents</p>
 		</div>
 		<div class="stat-card">
-			<h3 id="stat-formats">3</h3>
+			<h3 id="stat-formats">{{ stats.formats }}</h3>
 			<p>Formats disponibles</p>
 		</div>
 	</div>
