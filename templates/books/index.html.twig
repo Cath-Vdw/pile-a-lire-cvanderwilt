@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}La Pile à Lire - Gérez vos lectures{% endblock %}
+
+{% block body %}
+    {% include 'books/_hero.html.twig' %}
+    {% include 'books/_stats.html.twig' %}
+    {% include 'books/_how_it_works.html.twig' %}
+    {% include 'books/_search.html.twig' with {'genres_list': genres_list} %}
+    {# search est le seul partiel qui nécessite une variable en provenance du contrôleur #}
+    {% include 'books/_pile.html.twig' %}
+    {% include 'books/_about.html.twig' %}
+    {% include 'books/_admin.html.twig' %}
+    {% include 'books/_modal_book.html.twig' %}
+    {% include 'books/_modal_rating.html.twig' %}
+{% endblock %}
+
+{% block books_data %}
+<script>
+    const BOOKS_DATABASE = {{ books_json|raw }};
+</script>
+{% endblock %}

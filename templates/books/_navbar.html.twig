@@ -1,0 +1,40 @@
+<!-- ==========================================
+    NAVBAR — Barre de navigation principale
+    Reste visible en haut de page au défilement
+    grâce à "position: sticky" dans le CSS.
+    Les liens href="#id" déclenchent un scroll
+    doux jusqu'à la section correspondante.
+  ========================================== -->
+
+<nav class="navbar">
+	<div class="navbar-container">
+		<!-- Conteneur interne : centre le contenu et limite sa largeur max -->
+
+		<!-- Logo cliquable : ramène en haut de page (section #home) -->
+			<a href="#home" class="navbar-logo"> <img src="{{ asset('images/logo.png') }}" alt="Hibook Logo" class="logo-img">
+		</a>
+
+		<!-- Liens de navigation vers chaque section de la page (ancres internes) -->
+		<ul class="nav-menu">
+			<li>
+				<a href="#home" class="nav-link">Accueil</a>
+			</li>
+			<li>
+				<a href="#how-it-works" class="nav-link">Comment ça marche?</a>
+			</li>
+			<li>
+				<a href="#search" class="nav-link">Chercher un livre</a>
+			</li>
+			<li>
+				<a href="#my-pile" class="nav-link">Ma Pile à Lire</a>
+			</li>
+			<li>
+				<a href="#about" class="nav-link">À propos</a>
+			</li>
+			<li>
+				<a href="#admin-books" class="nav-link">Admin livres</a>
+			</li>
+		</ul>
+
+	</div>
+</nav>
