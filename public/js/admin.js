@@ -643,12 +643,14 @@
             language: document.getElementById("admin-language").value || "fr",
         };
 
+        let savedBook;
         if (currentEditId === null) {
-            // CRÉATION via l'API
-            await createBook(bookData);
+            savedBook = await createBook(bookData);
+            BOOKS_DATABASE.push(savedBook);
         } else {
-            // MODIFICATION via l'API
-            await updateBook(currentEditId, bookData);
+            savedBook = await updateBook(currentEditId, bookData);
+            const idx = BOOKS_DATABASE.findIndex((b) => b.id === savedBook.id);
+            if (idx !== -1) BOOKS_DATABASE[idx] = savedBook;
         }
 
         hideModal("admin-book-modal");
