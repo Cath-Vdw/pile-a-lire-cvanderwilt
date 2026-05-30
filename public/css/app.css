@@ -733,17 +733,20 @@ Bloc fonctionnel, mais adouci et plus cohérent.
 /* Bouton ✕ pour vider la recherche : masqué par défaut via style="display:none" dans le HTML.
    JavaScript le rend visible dès qu'un texte est saisi dans la barre */
 .quick-search-clear {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text-soft);
-  font-size: 1rem;
-  padding: 0 0.25rem;
-  transition: color 0.2s ease;
+    background: var(--text-soft);
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    transition: background 0.2s ease;
+    line-height: 1.4;
 }
 
 .quick-search-clear:hover {
-  color: var(--danger);
+    background: var(--text-main);
 }
 
 /* Accordéon des filtres : conteneur global avec bordure et coins arrondis.
