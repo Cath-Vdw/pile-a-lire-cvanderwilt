@@ -17,14 +17,17 @@
 
     const API_URL = "/api/admin/books";
 
-    // Récupère tous les livres depuis l'API.
-    // "async" signifie que cette fonction est asynchrone : elle ne bloque pas le reste
-    // du code pendant qu'elle attend la réponse du serveur.
-    // Elle retourne automatiquement une "promesse" (Promise) qui se résoudra
-    // avec la valeur retournée une fois la réponse reçue.
+    /**
+     * getAdminBooks(): Récupère tous les livres depuis l'API.
+     *
+     * async/await : async déclare que la fonction est asynchrone — elle ne bloque pas
+     * le reste de la page pendant qu'elle attend le serveur. await suspend l'exécution
+     * de la fonction jusqu'à la réponse, puis reprend avec le résultat.
+     * Toute fonction qui utilise await doit elle-même être déclarée async.
+     *
+     * @returns {Promise<object[]>} Tableau de livres, ou [] si la requête échoue
+     */
     async function getAdminBooks() {
-        // "await" met la fonction en pause ici jusqu'à ce que le serveur réponde,
-        // puis reprend avec le résultat — sans bloquer le reste de la page.
         const res = await fetch(API_URL);
         return res.ok ? res.json() : [];
     }
@@ -88,13 +91,9 @@
      *
      * Utilisée pour alimenter le datalist d'autocomplétion du champ "Série".
      *
-     * "async" est obligatoire ici car la fonction appelle getAdminBooks() avec await.
-     * Une fonction qui utilise await doit elle-même être déclarée async.
-     *
      * @returns {string[]} Tableau de noms de séries, triés alphabétiquement
      */
     async function collectSeries() {
-        // On attend que l'API renvoie la liste des livres avant de continuer.
         const books = await getAdminBooks();
         const set = new Set();
         books.forEach((b) => {
@@ -161,8 +160,6 @@
             return false;
         };
 
-        // On attend la réponse de l'API avant de filtrer les résultats.
-        // Sans "await", books serait une promesse non résolue, et .filter() planterait.
         let books = (await getAdminBooks()).filter(
             (b) =>
                 (b.title || "").toLowerCase().includes(q) ||
@@ -463,7 +460,7 @@
         currentEditId = book.id;
         document.getElementById("admin-modal-title").textContent =
             "Modifier un livre";
-        document.getElementById("admin-book-id").value = book.id || idx;
+        document.getElementById("admin-book-id").value = book.id;
         document.getElementById("admin-title").value = book.title || "";
         document.getElementById("admin-author").value = book.author || "";
         document.getElementById("admin-format").value = book.format || "";

@@ -17,14 +17,15 @@
  * 1. État global (filtres, pagination)
  * 2. Références DOM
  * 3. Initialisation
- * 4. Statistiques et filtres
- * 5. Recherche et filtrage
- * 6. Rendu grille + cartes livres
- * 7. Modal détail livre
- * 8. Pile à lire (onglets + items)
- * 9. Modal notation
- * 10. Hibook (mascotte + notifications)
- * 11. Animations
+ * 4. Détection recherche active
+ * 5. Statistiques et filtres
+ * 6. Recherche et filtrage
+ * 7. Rendu grille + cartes livres
+ * 8. Modal détail livre
+ * 9. Pile à lire (onglets + items)
+ * 10. Modal notation
+ * 11. Hibook (mascotte + notifications)
+ * 12. Animations
  */
 
 // ========== ÉTAT GLOBAL ==========
@@ -224,7 +225,6 @@ function setupEventListeners() {
     });
 
     // Filtre GENRE (checkboxes)
-    // Filtre GENRE ← tu ajoutes ici
     document.querySelectorAll(".genre-checkbox").forEach((input) => {
         input.addEventListener("change", (e) => {
             handleGenreChange(e.target);
@@ -362,7 +362,7 @@ function showGenreWarning() {
 function updateLengthFilter() {
     const format = currentFilters.format;
     if (format === "audio") {
-        elements.lengthLabel.textContent = "Longueur (durée)"; // ← était "Durée:"
+        elements.lengthLabel.textContent = "Longueur (durée)";
         elements.lengthShortLabel.textContent = "Moins de 6 heures";
         elements.lengthMediumLabel.textContent = "6 - 12 heures";
         elements.lengthLongLabel.textContent = "Plus de 12 heures";
@@ -370,7 +370,7 @@ function updateLengthFilter() {
             elements.lengthComicLabel.closest("label").style.display = "none";
         }
     } else {
-        elements.lengthLabel.textContent = "Longueur"; // ← était "Pages:"
+        elements.lengthLabel.textContent = "Longueur";
         if (elements.lengthComicLabel) {
             elements.lengthComicLabel.closest("label").style.display = "";
             elements.lengthComicLabel.textContent = "Moins de 100 pages (Comic)";
@@ -469,11 +469,11 @@ function getFilteredBooks() {
                 // Filtrage par pages (papier/ebook/comic)
                 if (!book.pages) return false;
 
-                // Nouveau filtre "comic": moins de 100 pages
+                // Filtre "comic": moins de 100 pages
                 if (currentFilters.length === "comic" && book.pages >= 100)
                     return false;
 
-                // Seuils existants: court 100-299, moyen 300-500, long > 500
+                // Seuils: court 100-299, moyen 300-500, long > 500
                 if (
                     currentFilters.length === "short" &&
                     (book.pages < 100 || book.pages >= 300)
@@ -758,9 +758,7 @@ function openBookModal(book) {
     elements.detailCover.textContent = book.title;
     elements.detailFormat.textContent = capitalizeFirst(book.format);
 
-    // Adapte la valeur affichée selon le format du LIVRE (pas du filtre actif)
-    // On ne touche PAS à elements.lengthLabel : c'est updateLengthFilter() qui
-    // gère ce label en fonction du filtre sélectionné dans l'accordéon.
+    // Adapte le label et la valeur affichés selon le format du livre
     elements.detailLengthLabel.textContent =
         book.format === "audio" ? "Durée:" : "Pages:";
     elements.detailLength.textContent =
@@ -828,14 +826,14 @@ function openBookModal(book) {
     elements.bookModal.classList.add("show");
     lucide.createIcons();
 
-    // Corrige le fill initial de l'étoile selon l'état
+    // Fill initial de l'étoile selon l'état (in-pile ou non)
     const starSvg = elements.detailFavoriteBtn.querySelector("svg");
     if (starSvg) {
         starSvg.setAttribute("fill", inPileModal ? "currentColor" : "none");
         starSvg.setAttribute("stroke", inPileModal ? "none" : "currentColor");
     }
 
-    // Corrige le fill initial du cœur selon l'état
+    // Fill initial du cœur selon l'état (aimé ou non)
     const heartSvg = detailLikeBtn.querySelector("svg");
     if (heartSvg) {
         heartSvg.setAttribute("fill", isLikedModal ? "currentColor" : "none");

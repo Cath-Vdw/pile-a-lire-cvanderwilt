@@ -1,38 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}La Pile à Lire - Gérez vos lectures avec Hibook
-{% endblock %}
+{% block title %}La Pile à Lire - Gérez vos lectures avec Hibook{% endblock %}
 
 {% block body %}
-	{% include 'books/_hero.html.twig' %}
-	{% include 'books/_stats.html.twig' %}
-	{% include 'books/_how_it_works.html.twig' %}
-	{% include 'books/_search.html.twig' with {'genres_list': genres_list} %}
-	{# search est le seul partiel qui nécessite une variable en provenance du contrôleur #}
-	{% include 'books/_pile.html.twig' %}
-	{% include 'books/_about.html.twig' %}
-	{% include 'books/_admin.html.twig' %}
-	{% include 'books/_modal_admin_book.html.twig' %}
-	{% include 'books/_modal_admin_delete.html.twig' %}
-	{% include 'books/_modal_book.html.twig' %}
-	{% include 'books/_modal_rating.html.twig' %}
+  {% include 'books/_hero.html.twig' %}
+  {% include 'books/_stats.html.twig' %}
+  {% include 'books/_how_it_works.html.twig' %}
+  {# _search est le seul partiel qui nécessite une variable en provenance du contrôleur #}
+  {% include 'books/_search.html.twig' with {'genres_list': genres_list} %}
+  {% include 'books/_pile.html.twig' %}
+  {% include 'books/_about.html.twig' %}
+  {% include 'books/_admin.html.twig' %}
+  {% include 'books/_modal_admin_book.html.twig' %}
+  {% include 'books/_modal_admin_delete.html.twig' %}
+  {% include 'books/_modal_book.html.twig' %}
+  {% include 'books/_modal_rating.html.twig' %}
 {% endblock %}
 
-
 {% block books_data %}
-<script>
-	{#
+{#
   Injection des données serveur dans le JavaScript côté navigateur.
-	
+
   BOOKS_DATABASE : tous les livres depuis MySQL, encodés en JSON par BookController.
   app.js lit cette variable au chargement pour afficher et filtrer le catalogue.
-	
-  GENRES_LIST    : liste fixe des genres définie dans BookController (self::GENRES_LIST),
-  encodée en JSON. admin.js la lit pour générer les cases à cocher dans la modal d'ajout/modification. 
-  Cette liste ne doit jamais être modifiée : elle est la référence des filtres de recherche.
-  Les genres saisis librement via "Autre" sont stockés directement dans book.genres[] en base et affichés dans la modal de détail
-  du livre par app.js — sans passer par cette liste.
-	#}
+
+  GENRES_LIST    : liste fixe des genres définie dans BookController (self::GENRES_LIST).
+  admin.js la lit pour générer les cases à cocher dans la modal d'ajout/modification.
+  Attention : cette liste est la référence des filtres — ne pas la modifier.
+  Les genres saisis via "Autre" sont stockés directement dans book.genres[]
+  et affichés par app.js sans passer par cette liste.
+#}
+<script>
   const BOOKS_DATABASE = {{ books_json|raw }};
   const GENRES_LIST = {{ genres_json|raw }};
 </script>

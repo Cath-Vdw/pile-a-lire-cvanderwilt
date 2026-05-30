@@ -3,9 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Book;
-// ServiceEntityRepository : classe de base Doctrine qui fournit findAll(), find(), findBy()...
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-// ManagerRegistry : service Symfony qui donne accès au gestionnaire de base de données
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,8 +14,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class BookRepository extends ServiceEntityRepository
 {
-  // Le constructeur passe l'entité Book au parent pour que Doctrine sache
-  // sur quelle table travailler (déterminée par le mapping de l'entité).
+  // Boilerplate requis par Symfony : lie ce repository à l'entité Book.
+  // Sans ça, Doctrine ne sait pas quelle table gérer.
   public function __construct(ManagerRegistry $registry)
   {
     parent::__construct($registry, Book::class);

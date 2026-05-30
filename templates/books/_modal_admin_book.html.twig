@@ -1,9 +1,9 @@
 {# ==========================================
-   MODAL ADMIN — Ajouter / Modifier un livre
-   Sert à la fois pour la création (id vide)
-   et pour l'édition (id renseigné par JS).
-   JavaScript ouvre cette modal en lui ajoutant
-   la classe "show", et la ferme en la retirant.
+    MODAL ADMIN — Ajouter / Modifier un livre
+    Sert à la fois pour la création (id vide)
+    et pour l'édition (id renseigné par JS).
+    JavaScript ouvre cette modal en lui ajoutant
+    la classe "show", et la ferme en la retirant.
 ========================================== #}
 <div id="admin-book-modal" class="modal">
   <div class="modal-content" style="max-width:680px;">
@@ -12,11 +12,11 @@
     <div class="modal-body" style="flex-direction:column; gap:1.2rem;">
 
       {# Le titre de la modal est mis à jour par JavaScript :
-         "Ajouter un livre" en création, "Modifier un livre" en édition #}
+          "Ajouter un livre" en création, "Modifier un livre" en édition #}
       <h2 id="admin-modal-title" style="margin-bottom:.5rem;">Ajouter un livre</h2>
 
       {# Champ caché : stocke l'id du livre en cours d'édition.
-         Vide = création d'un nouveau livre. #}
+          Vide = création d'un nouveau livre. #}
       <input type="hidden" id="admin-book-id" value="">
 
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
@@ -84,7 +84,7 @@
         </div>
 
         <!-- Nombre de pages : affiché pour les formats papier et ebook.
-             JavaScript masque ce champ et affiche le champ Durée si format = audio. -->
+              JavaScript masque ce champ et affiche le champ Durée si format = audio. -->
         <div id="admin-pages-group" style="display:flex; flex-direction:column; gap:.3rem;">
           <label for="admin-pages" style="font-weight:600; font-size:.85rem;">
             Nombre de pages
@@ -143,7 +143,7 @@
       </div><!-- /grid -->
 
       <!-- Genres : checkboxes générées par JavaScript.
-           Maximum 3 genres sélectionnables simultanément. -->
+            Maximum 3 genres sélectionnables simultanément. -->
       <div style="display:flex; flex-direction:column; gap:.5rem;">
         <label style="font-weight:600; font-size:.85rem;">
           Genre(s) <span style="color:red">*</span>

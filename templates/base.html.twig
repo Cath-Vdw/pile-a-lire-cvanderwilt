@@ -1,51 +1,40 @@
 <!DOCTYPE html>
 <html lang="fr">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>
-			{% block title %}La Pile à Lire
-			{% endblock %}
-		</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    {% block title %}La Pile à Lire{% endblock %}
+  </title>
+  {# Lucide Icons depuis CDN #}
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  {# Police Nickainley #}
+  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/nickainley">
+  <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+  {% block stylesheets %}{% endblock %}
+</head>
+<body>
+  {# La navbar est partagée entre toutes les pages #}
+  {% block navbar %}
+    {% include 'books/_navbar.html.twig' %}
+  {% endblock %}
 
-		{# Lucide Icons depuis CDN #}
-		<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  {% block body %}{% endblock %}
 
-		{# Police Nickainley #}
-		<link
-		rel="stylesheet" href="https://fonts.cdnfonts.com/css/nickainley">
+  <footer class="footer">
+    <p>&copy; 2026 La Pile à Lire - Créé avec ❤️ pour les lecteurs</p>
+  </footer>
 
-		{# CSS #}
-		<link rel="stylesheet" href="{{ asset('css/app.css') }}"> {% block stylesheets %}{% endblock %}
-		</head>
-		<body>
+  {# Les livres venant de MySQL sont injectés ici pour que app.js les utilise #}
+  {% block books_data %}{% endblock %}
 
-			{# La navbar est partagée entre toutes les pages #}
-			{% block navbar %}
-				{% include 'books/_navbar.html.twig' %}
-			{% endblock %}
-
-			{% block body %}{% endblock %}
-
-			<footer class="footer">
-				<p>&copy; 2026 La Pile à Lire - Créé avec ❤️ pour les lecteurs</p>
-			</footer>
-
-			{# Les livres venant de MySQL sont injectés ici pour que app.js les utilise #}
-			{% block books_data %}{% endblock %}
-
-			{# scripts JS #}
-			<script src="{{ asset('js/storage.js') }}"></script>
-			<script src="{{ asset('js/app.js') }}"></script>
-      {# scripts liés à la partie admin de la base de données #}
-			<script src="{{ asset('js/storage.js') }}"></script>
-			<script src="{{ asset('js/app.js') }}"></script>
-			<script src="{{ asset('js/admin.js') }}"></script>
-
-			{% block javascripts %}{% endblock %}
-
-			<script>
-				lucide.createIcons();
-			</script>
-		</body>
-	</html>
+  <script src="{{ asset('js/storage.js') }}"></script>
+  <script src="{{ asset('js/app.js') }}"></script>
+  {# admin.js : gère l'interface d'administration (création, modification, suppression de livres) #}
+  <script src="{{ asset('js/admin.js') }}"></script>
+  {% block javascripts %}{% endblock %}
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

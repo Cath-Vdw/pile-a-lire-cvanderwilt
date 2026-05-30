@@ -2,19 +2,18 @@
 
 namespace App\Entity;
 
-// BookRepository : classe qui contient les requêtes personnalisées liées aux livres
+// BookRepository : contient les requêtes personnalisées associées à cette entité
 use App\Repository\BookRepository;
-// Types : constantes Doctrine pour les types SQL moins courants (ex: TEXT, DATE...)
 use Doctrine\DBAL\Types\Types;
-// ORM : annotations/attributs PHP qui font le lien entre la classe et la table MySQL
 use Doctrine\ORM\Mapping as ORM;
 
-// Déclare que cette classe est une entité Doctrine mappée à une table en base de données.
+// Entité Doctrine mappée à la table "book".
 // repositoryClass lie cette entité à BookRepository pour les requêtes personnalisées.
 #[ORM\Entity(repositoryClass: BookRepository::class)]
+// Les setters retournent static pour permettre le chaînage : $book->setTitle('...')->setAuthor('...')
 class Book
 {
-  // Clé primaire auto-incrémentée : Doctrine génère l'id automatiquement à l'insertion.
+  // Clé primaire auto-incrémentée : l'id est géré exclusivement par Doctrine, pas de setter.
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
@@ -30,55 +29,53 @@ class Book
   #[ORM\Column(length: 20)]
   private ?string $format = null;
 
-  // nullable: true → la colonne SQL accepte NULL (champ optionnel selon le format du livre).
+  // nullable: true → null pour les livres audio (pas de pagination)
   #[ORM\Column(nullable: true)]
   private ?int $pages = null;
 
+  // nullable: true → null pour les livres papier et ebook (pas de durée)
   #[ORM\Column(length: 20, nullable: true)]
   private ?string $duration = null;
 
-  // Type JSON : Doctrine convertit automatiquement le tableau PHP en JSON pour le stockage,
-  // et le recharge comme tableau PHP à la lecture. Évite de créer une entité Genre séparée.
+  // Type JSON : Doctrine sérialise/désérialise automatiquement le tableau PHP.
+  // Évite de créer une entité Genre séparée pour une simple liste de slugs.
   #[ORM\Column(type: 'json')]
   private array $genres = [];
 
-  // Types::TEXT → colonne TEXT en SQL (pas de limite de taille, contrairement à VARCHAR).
+  // Types::TEXT → colonne TEXT en SQL, sans limite de taille (contrairement à VARCHAR).
   #[ORM\Column(type: Types::TEXT)]
   private ?string $summary = null;
 
   #[ORM\Column(length: 50)]
   private ?string $coverColor = null;
 
+  // nullable: true → null si le livre est indépendant (pas de série)
   #[ORM\Column(length: 255, nullable: true)]
   private ?string $series = null;
 
+  // nullable: true → null si le livre est indépendant (pas de numéro de tome)
   #[ORM\Column(nullable: true)]
   private ?int $bookNumber = null;
 
   #[ORM\Column(length: 5)]
   private ?string $language = null;
 
-  // Le constructeur définit 'fr' comme langue par défaut.
-  // Ainsi, si setLanguage() n'est pas appelé, la valeur est déjà correcte pour les livres francophones.
+  // Langue par défaut : 'fr'. setLanguage() reste disponible pour les livres en anglais ou autres.
   public function __construct()
   {
     $this->language = 'fr';
   }
 
-  // getId() n'a pas de setter car l'id est géré exclusivement par Doctrine (auto-incrémenté).
   public function getId(): ?int
   {
     return $this->id;
   }
 
-  // Exemple de getter : retourne la valeur de la propriété privée $title.
   public function getTitle(): ?string
   {
     return $this->title;
   }
 
-  // Exemple de setter : modifie $title et retourne $this pour permettre le chaînage (->setTitle()->setAuthor()...).
-  // Le type de retour "static" désigne l'instance courante.
   public function setTitle(string $title): static
   {
     $this->title = $title;
@@ -115,7 +112,6 @@ class Book
     return $this->pages;
   }
 
-  // Le paramètre est typé "?int" (nullable) car pages peut être null pour les livres audio.
   public function setPages(?int $pages): static
   {
     $this->pages = $pages;

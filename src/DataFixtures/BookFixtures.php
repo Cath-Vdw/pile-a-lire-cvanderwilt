@@ -2,11 +2,8 @@
 
 namespace App\DataFixtures;
 
-// Book : l'entité Doctrine qui représente un livre en base de données
 use App\Entity\Book;
-// Fixture : classe de base de DoctrineFixturesBundle — donne accès à load()
 use Doctrine\Bundle\FixturesBundle\Fixture;
-// ObjectManager : interface Doctrine pour persist() et flush()
 use Doctrine\Persistence\ObjectManager;
 
 /**
