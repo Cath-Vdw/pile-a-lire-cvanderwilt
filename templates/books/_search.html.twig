@@ -8,7 +8,7 @@
 		<h2>Cherchez un livre</h2>
 
 		<!-- Message d'invitation affiché par défaut, avant toute recherche.
-					JavaScript le masque dès qu'une recherche est lancée. -->
+							JavaScript le masque dès qu'une recherche est lancée. -->
 		<div id="search-prompt" class="search-prompt">
 			<img src="./images/logo-bleu.png" alt="Hibook" class="hibook-sad">
 			<div class="search-prompt-text">
@@ -19,8 +19,8 @@
 		</div>
 
 		<!-- Barre de recherche rapide (titre / auteur)
-				Peut être combinée avec les filtres de l'accordéon ci-dessous.
-				La recherche se déclenche à chaque frappe via JavaScript. -->
+						Peut être combinée avec les filtres de l'accordéon ci-dessous.
+						La recherche se déclenche à chaque frappe via JavaScript. -->
 		<div class="quick-search-bar">
 			<i data-lucide="search" class="quick-search-icon"></i>
 			<input
@@ -30,9 +30,9 @@
 		</div>
 
 		<!-- Accordéon de filtres
-			Un seul panneau peut être ouvert à la fois (géré par JavaScript).
-			Chaque bouton .accordion-header porte un data-accordion="id" qui permet
-			à JavaScript d'identifier quel panneau ouvrir ou fermer. -->
+					Un seul panneau peut être ouvert à la fois (géré par JavaScript).
+					Chaque bouton .accordion-header porte un data-accordion="id" qui permet
+					à JavaScript d'identifier quel panneau ouvrir ou fermer. -->
 		<div
 			class="filters-accordion" id="filters-accordion">
 
@@ -51,8 +51,8 @@
 						<div
 							class="filter-options">
 							<!-- Boutons radio groupés par name="format" : un seul choix possible.
-									La valeur (value=) est lue par JavaScript pour filtrer les résultats.
-									checked : option sélectionnée par défaut. -->
+																La valeur (value=) est lue par JavaScript pour filtrer les résultats.
+																checked : option sélectionnée par défaut. -->
 							<label class="radio-label">
 								<input type="radio" name="format" value="all" checked>
 								<span>Tous les formats</span>
@@ -77,7 +77,8 @@
 			<!-- === Filtre Longueur === -->
 			<div class="accordion-item">
 				<button class="accordion-header" data-accordion="length">
-					<span>Longueur</span>
+					<span id="length-label">Longueur</span>
+            <!-- id=length-label : JavaScript remplace son texte par "Durée" quand le format Audiobook est sélectionné -->
 					<svg class="accordion-chevron" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<polyline points="6 9 12 15 18 9"></polyline>
 					</svg>
@@ -97,7 +98,7 @@
 								<input
 								type="radio" name="length" value="short">
 								<!-- id= sur les trois spans suivants : JavaScript remplace leur texte
-										par des durées en minutes quand le format Audiobook est sélectionné -->
+																		par des durées en minutes quand le format Audiobook est sélectionné -->
 								<span id="length-short-label">100 - 299 pages</span>
 							</label>
 							<label class="radio-label">
@@ -157,13 +158,13 @@
 			<div id="books-grid" class="books-grid"></div>
 
 			<!-- Bouton "Voir plus" : caché par défaut.
-					JavaScript l'affiche s'il reste des livres à charger (pagination par tranches). -->
+								JavaScript l'affiche s'il reste des livres à charger (pagination par tranches). -->
 			<div class="load-more-container" id="load-more-container" style="display:none;">
 				<button id="load-more-btn" class="btn btn-secondary">Voir plus de livres</button>
 			</div>
 
 			<!-- Message "aucun résultat" : caché par défaut.
-						JavaScript l'affiche si la recherche ne retourne aucun livre. -->
+									JavaScript l'affiche si la recherche ne retourne aucun livre. -->
 			<div id="no-results" class="no-results">
 				<img src="./images/logo-bleu.png" alt="Hibook" class="hibook-sad">
 				<h3>Aucun livre ne correspond à votre recherche</h3>
