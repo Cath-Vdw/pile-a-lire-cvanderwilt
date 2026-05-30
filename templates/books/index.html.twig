@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}La Pile à Lire - Gérez vos lectures{% endblock %}
+{% block title %}La Pile à Lire - Gérez vos lectures avec Hibook{% endblock %}
 
 {% block body %}
     {% include 'books/_hero.html.twig' %}
@@ -11,6 +11,8 @@
     {% include 'books/_pile.html.twig' %}
     {% include 'books/_about.html.twig' %}
     {% include 'books/_admin.html.twig' %}
+    {% include 'books/_modal_admin_book.html.twig' %}
+    {% include 'books/_modal_admin_delete.html.twig' %}
     {% include 'books/_modal_book.html.twig' %}
     {% include 'books/_modal_rating.html.twig' %}
 {% endblock %}

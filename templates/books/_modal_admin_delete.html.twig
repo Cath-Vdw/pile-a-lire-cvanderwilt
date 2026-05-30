@@ -1,0 +1,25 @@
+{# ==========================================
+   MODAL CONFIRMATION — Suppression
+   JavaScript y injecte le titre du livre
+   concerné et gère la confirmation.
+========================================== #}
+<div id="admin-delete-modal" class="modal">
+  <div class="modal-content" style="max-width:420px;">
+    <span class="close-modal" id="admin-delete-close">&times;</span>
+    <div class="modal-body" style="flex-direction:column; gap:1.2rem; text-align:center;">
+      <i data-lucide="trash-2" style="width:48px;height:48px;color:#ef4444;margin:0 auto;"></i>
+      <h2 style="font-size:1.2rem;">Supprimer ce livre ?</h2>
+      {# JavaScript injecte ici le titre du livre à supprimer #}
+      <p id="admin-delete-book-name" style="font-weight:600;"></p>
+      <p style="font-size:.88rem; color:#6b7280;">Cette action est irréversible. Le livre sera retiré de
+        toutes les piles.</p>
+      <div class="modal-actions" style="justify-content:center; gap:.75rem;">
+        <button id="admin-delete-cancel" class="btn btn-secondary">Annuler</button>
+        <button id="admin-delete-confirm" class="btn" style="background:#ef4444;color:#fff;">
+          <i data-lucide="trash-2" style="width:14px;height:14px;vertical-align:middle;margin-right:.3rem;"></i>
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+</div><!-- /admin-delete-modal -->

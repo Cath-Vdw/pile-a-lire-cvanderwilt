@@ -1,0 +1,179 @@
+{# ==========================================
+   MODAL ADMIN — Ajouter / Modifier un livre
+   Sert à la fois pour la création (id vide)
+   et pour l'édition (id renseigné par JS).
+   JavaScript ouvre cette modal en lui ajoutant
+   la classe "show", et la ferme en la retirant.
+========================================== #}
+<div id="admin-book-modal" class="modal">
+  <div class="modal-content" style="max-width:680px;">
+    <span class="close-modal" id="admin-modal-close">&times;</span>
+
+    <div class="modal-body" style="flex-direction:column; gap:1.2rem;">
+
+      {# Le titre de la modal est mis à jour par JavaScript :
+         "Ajouter un livre" en création, "Modifier un livre" en édition #}
+      <h2 id="admin-modal-title" style="margin-bottom:.5rem;">Ajouter un livre</h2>
+
+      {# Champ caché : stocke l'id du livre en cours d'édition.
+         Vide = création d'un nouveau livre. #}
+      <input type="hidden" id="admin-book-id" value="">
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+
+        <!-- Titre -->
+        <div style="display:flex; flex-direction:column; gap:.3rem;">
+          <label for="admin-title" style="font-weight:600; font-size:.85rem;">
+            Titre <span style="color:red">*</span>
+          </label>
+          <input type="text" id="admin-title" class="quick-search-input" placeholder="Ex : Le Nom du Vent"
+            style="padding:.55rem .75rem; font-size:.9rem;">
+          <span id="error-title" style="color:red;font-size:.78rem;display:none;"></span>
+        </div>
+
+        <!-- Auteur -->
+        <div style="display:flex; flex-direction:column; gap:.3rem;">
+          <label for="admin-author" style="font-weight:600; font-size:.85rem;">
+            Auteur <span style="color:red">*</span>
+          </label>
+          <input type="text" id="admin-author" class="quick-search-input" placeholder="Ex : Patrick Rothfuss"
+            style="padding:.55rem .75rem; font-size:.9rem;">
+          <span id="error-author" style="color:red;font-size:.78rem;display:none;"></span>
+        </div>
+
+        <!-- Format -->
+        <div style="display:flex; flex-direction:column; gap:.3rem;">
+          <label for="admin-format" style="font-weight:600; font-size:.85rem;">
+            Format <span style="color:red">*</span>
+          </label>
+          <select id="admin-format" class="quick-search-input"
+            style="padding:.55rem .75rem; font-size:.9rem; cursor:pointer;">
+            <option value="">— Choisir —</option>
+            <option value="papier">Papier</option>
+            <option value="ebook">E-book</option>
+            <option value="audio">Audiobook</option>
+          </select>
+          <span id="error-format" style="color:red;font-size:.78rem;display:none;"></span>
+        </div>
+
+        <!-- Couleur de couverture -->
+        <div style="display:flex; flex-direction:column; gap:.3rem;">
+          <label for="admin-cover-color" style="font-weight:600; font-size:.85rem;">
+            Couleur de couverture <span style="color:red">*</span>
+          </label>
+          <select id="admin-cover-color" class="quick-search-input"
+            style="padding:.55rem .75rem; font-size:.9rem; cursor:pointer;">
+            <option value="">— Choisir —</option>
+            <option value="genre-aventure">Aventure</option>
+            <option value="genre-manga">BD/manga</option>
+            <option value="genre-classique">Classique</option>
+            <option value="genre-drame">Drame</option>
+            <option value="genre-fantasy">Fantasy</option>
+            <option value="genre-horreur">Horreur</option>
+            <option value="genre-thriller">Thriller</option>
+            <option value="genre-humour">Humour</option>
+            <option value="genre-jeunesse">Jeunesse</option>
+            <option value="genre-non-fiction">Non-Fiction</option>
+            <option value="genre-poesie">Poésie</option>
+            <option value="genre-policier">Policier</option>
+            <option value="genre-romance">Romance</option>
+            <option value="genre-sf">Sci-Fi</option>
+            <option value="genre-autre">Autre</option>
+          </select>
+          <span id="error-cover-color" style="color:red;font-size:.78rem;display:none;"></span>
+        </div>
+
+        <!-- Nombre de pages : affiché pour les formats papier et ebook.
+             JavaScript masque ce champ et affiche le champ Durée si format = audio. -->
+        <div id="admin-pages-group" style="display:flex; flex-direction:column; gap:.3rem;">
+          <label for="admin-pages" style="font-weight:600; font-size:.85rem;">
+            Nombre de pages
+          </label>
+          <input type="number" id="admin-pages" class="quick-search-input" placeholder="Ex : 662" min="1"
+            style="padding:.55rem .75rem; font-size:.9rem;">
+          <span id="error-pages" style="color:red;font-size:.78rem;display:none;"></span>
+        </div>
+
+        <!-- Durée : masqué par défaut, affiché par JavaScript uniquement si format = audio. -->
+        <div id="admin-duration-group" style="display:none; flex-direction:column; gap:.3rem;">
+          <label for="admin-duration" style="font-weight:600; font-size:.85rem;">
+            Durée (audiobook)
+          </label>
+          <input type="text" id="admin-duration" class="quick-search-input" placeholder="Ex : 11h 30m"
+            style="padding:.55rem .75rem; font-size:.9rem;">
+          <span id="error-duration" style="color:red;font-size:.78rem;display:none;"></span>
+        </div>
+
+        <!-- Série (optionnel) -->
+        <div style="display:flex; flex-direction:column; gap:.3rem;">
+          <label for="admin-series" style="font-weight:600; font-size:.85rem;">
+            Série
+            <small style="font-weight:400; margin-left:.4rem; color:#6b7280;">— optionnel</small>
+          </label>
+          <input type="text" id="admin-series" class="quick-search-input" list="admin-series-datalist"
+            placeholder="Ex : Les annales du Disque-monde" style="padding:.55rem .75rem; font-size:.9rem;">
+          <datalist id="admin-series-datalist">
+            {# Alimenté dynamiquement par JavaScript #}
+          </datalist>
+        </div>
+
+        <!-- Numéro de tome -->
+        <div style="display:flex; flex-direction:column; gap:.3rem;">
+          <label for="admin-book-number" style="font-weight:600; font-size:.85rem;">
+            Numéro de tome
+            <small style="font-weight:400; margin-left:.4rem; color:#6b7280;">— si série</small>
+          </label>
+          <input type="number" id="admin-book-number" class="quick-search-input" placeholder="Ex : 3" min="1"
+            style="padding:.55rem .75rem; font-size:.9rem;">
+          <span id="error-book-number" style="color:red;font-size:.78rem;display:none;"></span>
+        </div>
+
+        <!-- Langue -->
+        <div style="display:flex; flex-direction:column; gap:.3rem;">
+          <label for="admin-language" style="font-weight:600; font-size:.85rem;">
+            Langue <span style="color:red">*</span>
+          </label>
+          <select id="admin-language" class="quick-search-input"
+            style="padding:.55rem .75rem; font-size:.9rem; cursor:pointer;">
+            <option value="fr">🇫🇷 Français</option>
+            <option value="en">🇬🇧 Anglais</option>
+          </select>
+        </div>
+
+      </div><!-- /grid -->
+
+      <!-- Genres : checkboxes générées par JavaScript.
+           Maximum 3 genres sélectionnables simultanément. -->
+      <div style="display:flex; flex-direction:column; gap:.5rem;">
+        <label style="font-weight:600; font-size:.85rem;">
+          Genre(s) <span style="color:red">*</span>
+          <small style="font-weight:400; margin-left:.5rem;">— max 3</small>
+        </label>
+        <div id="admin-genres-checkboxes" class="genres-checkbox-list">
+          {# Généré par JavaScript #}
+        </div>
+        <span id="error-genres" style="color:red;font-size:.78rem;display:none;"></span>
+      </div>
+
+      <!-- Résumé -->
+      <div style="display:flex; flex-direction:column; gap:.3rem;">
+        <label for="admin-summary" style="font-weight:600; font-size:.85rem;">
+          Résumé <span style="color:red">*</span>
+        </label>
+        <textarea id="admin-summary" class="review-textarea" placeholder="Décrivez le livre en quelques lignes…"
+          style="min-height:100px;"></textarea>
+        <span id="error-summary" style="color:red;font-size:.78rem;display:none;"></span>
+      </div>
+
+      <!-- Boutons d'action -->
+      <div class="modal-actions" style="justify-content:flex-end; gap:.75rem;">
+        <button id="admin-modal-cancel" class="btn btn-secondary">Annuler</button>
+        <button id="admin-modal-save" class="btn btn-secondary">
+          <i data-lucide="save" style="width:15px;height:15px;vertical-align:middle;margin-right:.3rem;"></i>
+          Enregistrer
+        </button>
+      </div>
+
+    </div><!-- /modal-body -->
+  </div>
+</div><!-- /admin-book-modal -->
